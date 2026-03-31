@@ -1,163 +1,251 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap");
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap')
+layer(base);
+@import 'tw-animate-css' layer(base);
+@import 'shadcn/tailwind.css' layer(base);
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
 
-:root {
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8fafc;
-  --bg-tertiary: #f1f5f9;
-  --text-primary: #0f172a;
-  --text-secondary: #64748b;
-  --text-muted: #94a3b8;
-  --border: #e2e8f0;
-  --border-strong: #cbd5e1;
-  --accent: #2563eb;
-  --accent-hover: #1d4ed8;
-  --accent-light: #dbeafe;
-  --accent-subtle: #eff6ff;
-  --success: #10b981;
-  --warning: #f59e0b;
-  --error: #ef4444;
-  --fairplay: #8b5cf6;
-}
+@theme {
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #f8fafc;
+  --color-bg-tertiary: #f1f5f9;
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #64748b;
+  --color-text-muted: #94a3b8;
 
-html {
-  scroll-behavior: smooth;
-  -webkit-tap-highlight-color: transparent;
-}
+  --color-border: #e2e8f0;
+  --color-border-strong: #cbd5e1;
 
-body {
-  font-family: "Inter", system-ui, sans-serif;
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  min-height: 100dvh;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+  --color-accent: #2563eb;
+  --color-accent-hover: #1d4ed8;
+  --color-accent-light: #dbeafe;
+  --color-accent-subtle: #eff6ff;
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-fairplay: #8b5cf6;
 
-::-webkit-scrollbar-track {
-  background: var(--bg-secondary);
-}
+  --font-sans: Inter, system-ui, sans-serif;
+  --font-mono: JetBrains Mono, monospace;
 
-::-webkit-scrollbar-thumb {
-  background: var(--border-strong);
-  border-radius: 3px;
-}
+  --spacing-safe-bottom: env(safe-area-inset-bottom);
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted);
-}
+  --animate-shimmer: shimmer 2s infinite linear;
+  --animate-scale-pop: scale-pop 300ms ease-out;
+  --animate-fade-in: fade-in 200ms ease-out;
+  --animate-slide-up: slide-up 300ms ease-out;
 
-/* Focus styles */
-:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-
-/* Selection */
-::selection {
-  background-color: var(--accent-light);
-  color: var(--accent-hover);
-}
-
-/* Safe area for PWA */
-@supports (padding-bottom: env(safe-area-inset-bottom)) {
-  .safe-bottom {
-    padding-bottom: env(safe-area-inset-bottom);
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+  @keyframes scale-pop {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  @keyframes fade-in {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  @keyframes slide-up {
+    0% {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
 
-/* Skeleton loading */
-.skeleton {
-  background: linear-gradient(
-    90deg,
-    var(--bg-tertiary) 25%,
-    var(--bg-secondary) 50%,
-    var(--bg-tertiary) 75%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 2s infinite linear;
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
 }
 
-/* Card hover effect */
-.card-hover {
-  transition:
-    transform 200ms ease-out,
-    box-shadow 200ms ease-out;
-}
-
-.card-hover:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-/* Button press effect */
-.btn-press:active {
-  transform: scale(0.98);
-}
-
-/* Number/Mono text */
-.font-mono {
-  font-family: "JetBrains Mono", monospace;
-}
-
-/* Status badges */
-.badge {
-  @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium;
-}
-
-.badge-upcoming {
-  @apply bg-gray-100 text-gray-600;
-}
-
-.badge-live {
-  @apply bg-green-100 text-green-700;
-}
-
-.badge-completed {
-  @apply bg-blue-100 text-blue-700;
-}
-
-.badge-blocked {
-  @apply bg-red-100 text-red-700;
-}
-
-/* Match score animation */
-.score-pop {
-  animation: scale-pop 300ms ease-out;
-}
-
-/* Bottom nav safe area */
-.bottom-nav {
-  padding-bottom: env(safe-area-inset-bottom, 0);
-}
-
-/* PWA install banner */
-.pwa-banner {
-  @apply fixed bottom-20 left-4 right-4 bg-accent text-white p-4 rounded-xl shadow-lg;
-  @apply flex items-center justify-between gap-4;
-  @apply animate-slide-up;
+@utility text-balance {
+  text-wrap: balance;
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  :root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8fafc;
+    --bg-tertiary: #f1f5f9;
+    --text-primary: #0f172a;
+    --text-secondary: #64748b;
+    --text-muted: #94a3b8;
+    --border: #e2e8f0;
+    --border-strong: #cbd5e1;
+    --accent: #2563eb;
+    --accent-hover: #1d4ed8;
+    --accent-light: #dbeafe;
+    --accent-subtle: #eff6ff;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --error: #ef4444;
+    --fairplay: #8b5cf6;
+  }
+
+  * {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    min-height: 100dvh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--bg-secondary);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--border-strong);
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+  }
+
+  /* Focus styles */
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  /* Selection */
+  ::selection {
+    background-color: var(--accent-light);
+    color: var(--accent-hover);
+  }
+
+  /* Safe area for PWA */
+  @supports (padding-bottom: env(safe-area-inset-bottom)) {
+    .safe-bottom {
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+  }
+
+  /* Skeleton loading */
+  .skeleton {
+    background: linear-gradient(
+      90deg,
+      var(--bg-tertiary) 25%,
+      var(--bg-secondary) 50%,
+      var(--bg-tertiary) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite linear;
+  }
+
+  /* Card hover effect */
+  .card-hover {
+    transition:
+      transform 200ms ease-out,
+      box-shadow 200ms ease-out;
+  }
+
+  .card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Button press effect */
+  .btn-press:active {
+    transform: scale(0.98);
+  }
+
+  /* Number/Mono text */
+  .font-mono {
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* Status badges */
+  .badge {
+    @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .badge-upcoming {
+    @apply bg-gray-100 text-gray-600;
+  }
+
+  .badge-live {
+    @apply bg-green-100 text-green-700;
+  }
+
+  .badge-completed {
+    @apply bg-blue-100 text-blue-700;
+  }
+
+  .badge-blocked {
+    @apply bg-red-100 text-red-700;
+  }
+
+  /* Match score animation */
+  .score-pop {
+    animation: scale-pop 300ms ease-out;
+  }
+
+  /* Bottom nav safe area */
+  .bottom-nav {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  /* PWA install banner */
+  .pwa-banner {
+    @apply fixed bottom-20 left-4 right-4 bg-accent text-white p-4 rounded-xl shadow-lg;
+    @apply flex items-center justify-between gap-4;
+    @apply animate-slide-up;
   }
 }
 
