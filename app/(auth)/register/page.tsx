@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
-import { LogIn, User, Shield, Clipboard, Users } from "lucide-react";
+import { LogIn, Shield, Clipboard, Eye, EyeOff } from "lucide-react";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -15,12 +15,14 @@ export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [role, setRole] = useState("parent");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [role, setRole] = useState("admin");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const roleOptions = [
-    { value: "parent", label: "Padre/Tutor" },
+    { value: "admin", label: "Administrador" },
     { value: "scorer", label: "Planillero" },
   ];
 
@@ -41,13 +43,33 @@ export default function RegisterPage() {
       return;
     }
 
-    // Demo registration - in production this would use Convex Auth
-    setTimeout(() => {
-      localStorage.setItem("userRole", role);
-      localStorage.setItem("userName", name);
-      router.push("/" + role);
+    try {
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          password,
+          nombre: name,
+          rol: role,
+        }),
+      });
+
+      const data = await response.json();
+      if (!response.ok || !data.ok) {
+        setError(data.message || "No se pudo registrar");
+        return;
+      }
+
+      localStorage.setItem("userRole", data.user.rol);
+      localStorage.setItem("userName", data.user.nombre);
+      localStorage.setItem("userEmail", data.user.email);
+      router.push(data.redirectTo || "/");
+    } catch {
+      setError("No se pudo registrar");
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
   return (
@@ -94,20 +116,43 @@ export default function RegisterPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-            <Input
-              label="Contraseña"
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <Input
-              label="Confirmar contraseña"
-              type="password"
-              placeholder="••••••••"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-            />
+            <div className="relative">
+              <Input
+                label="Contraseña"
+                type={showPassword ? "text" : "password"}
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="pr-11"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((v) => !v)}
+                aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                className="absolute right-3 top-[2.6rem] text-text-muted hover:text-text-secondary"
+              >
+                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
+            </div>
+
+            <div className="relative">
+              <Input
+                label="Confirmar contraseña"
+                type={showConfirmPassword ? "text" : "password"}
+                placeholder="••••••••"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="pr-11"
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword((v) => !v)}
+                aria-label={showConfirmPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                className="absolute right-3 top-[2.6rem] text-text-muted hover:text-text-secondary"
+              >
+                {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
+            </div>
             <Select
               label="Rol"
               options={roleOptions}
@@ -117,13 +162,13 @@ export default function RegisterPage() {
             
             {/* Role Info */}
             <div className="p-3 bg-bg-tertiary rounded-lg">
-              {role === "parent" && (
+              {role === "admin" && (
                 <div className="flex items-start gap-3">
-                  <Users className="w-5 h-5 text-warning flex-shrink-0 mt-0.5" />
+                  <Shield className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-sm font-medium text-text-primary">Rol: Padre/Tutor</p>
+                    <p className="text-sm font-medium text-text-primary">Rol: Administrador</p>
                     <p className="text-xs text-text-muted">
-                      Podrás ver la tabla de posiciones, resultados y próximos partidos de tu equipo.
+                      Gestionarás la liga, partidos y equipos.
                     </p>
                   </div>
                 </div>

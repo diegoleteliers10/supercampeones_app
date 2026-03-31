@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { useMutation, useQuery } from "convex/react";
+import { api } from "../../../../convex/_generated/api";
 import { Header } from "@/components/ui/header";
 import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,88 +10,46 @@ import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { MatchCard } from "@/components/ui/match-card";
-import { Plus, Calendar, Filter, X } from "lucide-react";
-
-const rounds = [
-  { id: "1", number: 1, date: "2024-03-17", matchCount: 4 },
-  { id: "2", number: 2, date: "2024-03-24", matchCount: 4 },
-  { id: "3", number: 3, date: "2024-03-31", matchCount: 4 },
-];
-
-const matchesByRound: Record<string, any[]> = {
-  "1": [
-    {
-      id: "1",
-      localTeam: { name: "Los Tigres", primaryColor: "#F59E0B" },
-      visitorTeam: { name: "Real Niños", primaryColor: "#2563EB" },
-      scoreLocal: 2,
-      scoreVisitor: 1,
-      status: "completed" as const,
-      time: "10:00",
-      field: "Campo 1",
-    },
-    {
-      id: "2",
-      localTeam: { name: "Atlético Chiquito", primaryColor: "#10B981" },
-      visitorTeam: { name: "Barcelona Kids", primaryColor: "#DC2626" },
-      status: "live" as const,
-      time: "11:00",
-      field: "Campo 2",
-    },
-  ],
-  "2": [
-    {
-      id: "3",
-      localTeam: { name: "PSG Junior", primaryColor: "#7C3AED" },
-      visitorTeam: { name: "Milan Infantiles", primaryColor: "#EA580C" },
-      status: "upcoming" as const,
-      time: "10:00",
-      field: "Campo 1",
-    },
-    {
-      id: "4",
-      localTeam: { name: "Bayern Chiquitos", primaryColor: "#DC2626" },
-      visitorTeam: { name: "City Kids", primaryColor: "#60A5FA" },
-      status: "upcoming" as const,
-      time: "11:00",
-      field: "Campo 2",
-    },
-  ],
-  "3": [],
-};
+import { Plus, Calendar, X } from "lucide-react";
 
 export default function MatchesPage() {
-  const [selectedRound, setSelectedRound] = useState(rounds[0].id);
   const [showForm, setShowForm] = useState(false);
+  const [form, setForm] = useState({
+    ligaId: "",
+    categoriaId: "",
+    equipoLocalId: "",
+    equipoVisitanteId: "",
+    planilleroId: "",
+    fecha: "",
+    ubicacion: "",
+  });
+  const ligas = useQuery(api.api.listLigas) || [];
+  const categorias = useQuery(api.api.listCategorias, form.ligaId ? { ligaId: form.ligaId as any } : {}) || [];
+  const equipos = useQuery(api.api.listEquipos, form.categoriaId ? { categoriaId: form.categoriaId as any } : {}) || [];
+  const partidos = useQuery(api.api.listPartidos, {}) || [];
+  const planilleros = useQuery(api.api.listPlanilleros) || [];
+  const createPartido = useMutation(api.api.createPartido);
 
-  const currentRound = rounds.find(r => r.id === selectedRound);
-  const matches = matchesByRound[selectedRound] || [];
-
-  const roundOptions = rounds.map(r => ({
-    value: r.id,
-    label: `Fecha ${r.number} - ${new Date(r.date).toLocaleDateString("es-CL", { day: "numeric", month: "short" })}`,
-  }));
+  const getEquipoById = (id: string) => equipos.find((e: any) => e._id === id);
+  const statusFromEstado = (estado: string) => estado === "en_curso" ? "live" : estado === "finalizado" ? "completed" : "upcoming";
+  const handleCreate = async () => {
+    if (!form.categoriaId || !form.equipoLocalId || !form.equipoVisitanteId || !form.fecha || !form.ubicacion) return;
+    await createPartido({
+      categoriaId: form.categoriaId as any,
+      equipoLocalId: form.equipoLocalId as any,
+      equipoVisitanteId: form.equipoVisitanteId as any,
+      planilleroId: (form.planilleroId || undefined) as any,
+      fecha: new Date(form.fecha).getTime(),
+      ubicacion: form.ubicacion,
+    });
+    setShowForm(false);
+  };
 
   return (
     <div className="min-h-screen bg-bg-secondary">
       <Header title="Partidos" subtitle="Programación de fechas" />
 
       <div className="p-4 space-y-4">
-        {/* Round Selector */}
-        <div className="flex items-center gap-3">
-          <div className="flex-1">
-            <Select
-              options={roundOptions}
-              value={selectedRound}
-              onChange={(e) => setSelectedRound(e.target.value)}
-            />
-          </div>
-          <Button onClick={() => setShowForm(true)} size="lg">
-            <Plus className="w-5 h-5" />
-          </Button>
-        </div>
-
-        {/* Round Info */}
         <Card>
           <CardContent className="p-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -97,21 +57,21 @@ export default function MatchesPage() {
                 <Calendar className="w-5 h-5 text-accent" />
               </div>
               <div>
-                <p className="font-semibold text-text-primary">Fecha {currentRound?.number}</p>
+                <p className="font-semibold text-text-primary">Partidos Registrados</p>
                 <p className="text-sm text-text-muted">
-                  {currentRound && new Date(currentRound.date).toLocaleDateString("es-CL", {
-                    weekday: "long",
-                    day: "numeric",
-                    month: "long",
-                  })}
+                  {partidos.length} en total
                 </p>
               </div>
             </div>
-            <Badge variant={matches.length > 0 ? "completed" : "upcoming"}>
-              {matches.length} partidos
+            <Badge variant={partidos.length > 0 ? "completed" : "upcoming"}>
+              {partidos.length} partidos
             </Badge>
           </CardContent>
         </Card>
+
+        <Button onClick={() => setShowForm(true)} size="lg">
+          <Plus className="w-5 h-5" />
+        </Button>
 
         {/* Add Match Form */}
         {showForm && (
@@ -124,44 +84,47 @@ export default function MatchesPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               <Select 
+                label="Liga"
+                options={ligas.map((l: any) => ({ value: l._id, label: l.nombre }))}
+                value={form.ligaId}
+                onChange={(e) => setForm((prev) => ({ ...prev, ligaId: e.target.value as any, categoriaId: "", equipoLocalId: "", equipoVisitanteId: "" }))}
+              />
+              <Select 
+                label="Categoría"
+                options={categorias.map((c: any) => ({ value: c._id, label: c.nombre }))}
+                value={form.categoriaId}
+                onChange={(e) => setForm((prev) => ({ ...prev, categoriaId: e.target.value as any, equipoLocalId: "", equipoVisitanteId: "" }))}
+              />
+              <Select 
                 label="Equipo Local" 
-                options={[
-                  { value: "1", label: "Los Tigres" },
-                  { value: "2", label: "Real Niños" },
-                  { value: "3", label: "Atlético Chiquito" },
-                ]}
-                value=""
-                onChange={() => {}}
+                options={equipos.map((e: any) => ({ value: e._id, label: e.nombre }))}
+                value={form.equipoLocalId}
+                onChange={(e) => setForm((prev) => ({ ...prev, equipoLocalId: e.target.value as any }))}
               />
               <Select 
                 label="Equipo Visitante" 
-                options={[
-                  { value: "1", label: "Los Tigres" },
-                  { value: "2", label: "Real Niños" },
-                  { value: "3", label: "Atlético Chiquito" },
-                ]}
-                value=""
-                onChange={() => {}}
+                options={equipos
+                  .filter((e: any) => e._id !== form.equipoLocalId)
+                  .map((e: any) => ({ value: e._id, label: e.nombre }))}
+                value={form.equipoVisitanteId}
+                onChange={(e) => setForm((prev) => ({ ...prev, equipoVisitanteId: e.target.value as any }))}
               />
               <div className="grid grid-cols-2 gap-3">
-                <Input label="Hora" type="time" defaultValue="10:00" />
-                <Input label="Campo" placeholder="Campo 1" />
+                <Input label="Fecha y hora" type="datetime-local" value={form.fecha} onChange={(e) => setForm((prev) => ({ ...prev, fecha: e.target.value }))} />
+                <Input label="Campo" placeholder="Campo 1" value={form.ubicacion} onChange={(e) => setForm((prev) => ({ ...prev, ubicacion: e.target.value }))} />
               </div>
-              <Select 
-                label="Planillero" 
-                options={[
-                  { value: "1", label: "Juan Pérez" },
-                  { value: "2", label: "María García" },
-                ]}
-                value=""
-                onChange={() => {}}
+              <Select
+                label="Planillero"
+                options={planilleros.map((p: any) => ({ value: p._id, label: p.nombre }))}
+                value={form.planilleroId}
+                onChange={(e) => setForm((prev) => ({ ...prev, planilleroId: e.target.value }))}
               />
             </CardContent>
             <CardFooter>
               <Button variant="secondary" onClick={() => setShowForm(false)} className="flex-1">
                 Cancelar
               </Button>
-              <Button className="flex-1">
+              <Button className="flex-1" onClick={handleCreate}>
                 Crear Partido
               </Button>
             </CardFooter>
@@ -170,23 +133,23 @@ export default function MatchesPage() {
 
         {/* Matches List */}
         <div className="space-y-3">
-          {matches.map((match) => (
+          {partidos.map((match: any) => (
             <MatchCard
-              key={match.id}
-              localTeam={match.localTeam}
-              visitorTeam={match.visitorTeam}
-              scoreLocal={match.scoreLocal}
-              scoreVisitor={match.scoreVisitor}
-              status={match.status}
-              time={match.time}
-              field={match.field}
+              key={match._id}
+              localTeam={{ name: getEquipoById(match.equipoLocalId)?.nombre || "Local" }}
+              visitorTeam={{ name: getEquipoById(match.equipoVisitanteId)?.nombre || "Visita" }}
+              scoreLocal={match.golesLocal ?? 0}
+              scoreVisitor={match.golesVisitante ?? 0}
+              status={statusFromEstado(match.estado)}
+              time={new Date(match.fecha).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+              field={match.ubicacion}
               onClick={() => {}}
             />
           ))}
         </div>
 
         {/* Empty State */}
-        {matches.length === 0 && !showForm && (
+        {partidos.length === 0 && !showForm && (
           <Card>
             <CardContent className="p-8 text-center">
               <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-bg-tertiary flex items-center justify-center">

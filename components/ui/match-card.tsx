@@ -43,7 +43,7 @@ export function MatchCard({
     <div
       onClick={onClick}
       className={cn(
-        "bg-white border border-border rounded-xl p-4 transition-all duration-200",
+        "w-full bg-white border border-border rounded-2xl p-3.5 sm:p-4 shadow-sm transition-all duration-200",
         onClick && "cursor-pointer card-hover",
         className
       )}
@@ -55,25 +55,24 @@ export function MatchCard({
           {status === "upcoming" ? "Próximo" : status === "live" ? "En Vivo" : status === "completed" ? "Finalizado" : "Bloqueado"}
         </Badge>
         {time && (
-          <span className="text-sm text-text-secondary font-medium">
+          <span className="text-lg font-semibold font-mono tracking-tight text-text-secondary">
             {time}
           </span>
         )}
       </div>
 
       {/* Teams and Score */}
-      <div className="flex items-center justify-between">
+      <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 sm:gap-3">
         {/* Local Team */}
-        <div className="flex-1 flex items-center gap-3">
+        <div className="min-w-0 flex items-center gap-2.5">
           <Avatar
             name={localTeam.name}
             src={localTeam.logoUrl}
-            size="lg"
-            className={localTeam.primaryColor ? "" : ""}
+            size="md"
             style={localTeam.primaryColor ? { backgroundColor: localTeam.primaryColor + "20", color: localTeam.primaryColor } : undefined}
           />
-          <div className="min-w-0">
-            <p className="font-semibold text-text-primary truncate">
+          <div className="min-w-0 flex-1">
+            <p className="font-semibold text-[clamp(0.95rem,3.5vw,1.1rem)] leading-tight text-text-primary truncate">
               {localTeam.name}
             </p>
           </div>
@@ -81,41 +80,41 @@ export function MatchCard({
 
         {/* Score */}
         <div className={cn(
-          "px-4 flex items-center gap-2",
+          "px-1 sm:px-2 flex items-center gap-1.5 sm:gap-2 justify-center",
           isLive && "animate-scale-pop"
         )}>
           {showScore ? (
             <>
               <span className={cn(
-                "text-3xl font-bold font-mono",
+                "text-[clamp(1.7rem,7vw,2.1rem)] leading-none font-bold font-mono",
                 scoreLocal! > scoreVisitor! ? "text-success" : scoreLocal! < scoreVisitor! ? "text-text-primary" : "text-text-secondary"
               )}>
                 {scoreLocal}
               </span>
-              <span className="text-xl text-text-muted">-</span>
+              <span className="text-lg sm:text-xl text-text-muted">-</span>
               <span className={cn(
-                "text-3xl font-bold font-mono",
+                "text-[clamp(1.7rem,7vw,2.1rem)] leading-none font-bold font-mono",
                 scoreVisitor! > scoreLocal! ? "text-success" : scoreLocal! < scoreVisitor! ? "text-text-primary" : "text-text-secondary"
               )}>
                 {scoreVisitor}
               </span>
             </>
           ) : (
-            <span className="text-2xl text-text-muted font-light">vs</span>
+            <span className="text-xl sm:text-2xl uppercase tracking-wide text-text-muted font-medium">vs</span>
           )}
         </div>
 
         {/* Visitor Team */}
-        <div className="flex-1 flex items-center gap-3 justify-end">
-          <div className="min-w-0 text-right">
-            <p className="font-semibold text-text-primary truncate">
+        <div className="min-w-0 flex items-center gap-2.5 justify-end">
+          <div className="min-w-0 flex-1 text-right">
+            <p className="font-semibold text-[clamp(0.95rem,3.5vw,1.1rem)] leading-tight text-text-primary truncate">
               {visitorTeam.name}
             </p>
           </div>
           <Avatar
             name={visitorTeam.name}
             src={visitorTeam.logoUrl}
-            size="lg"
+            size="md"
             style={visitorTeam.primaryColor ? { backgroundColor: visitorTeam.primaryColor + "20", color: visitorTeam.primaryColor } : undefined}
           />
         </div>
@@ -123,8 +122,8 @@ export function MatchCard({
 
       {/* Field */}
       {field && (
-        <div className="mt-3 pt-3 border-t border-border">
-          <p className="text-xs text-text-muted">
+        <div className="mt-3 pt-3 border-t border-border/80">
+          <p className="text-sm text-text-muted">
             Campo: <span className="font-medium text-text-secondary">{field}</span>
           </p>
         </div>

@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { LogIn, User, Shield, Clipboard, Users } from "lucide-react";
+import { LogIn, Shield, Clipboard, Users } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -20,20 +20,38 @@ export default function LoginPage() {
     e.preventDefault();
     setLoading(true);
     setError("");
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
 
-    // Demo login - in production this would use Convex Auth
-    setTimeout(() => {
-      if (email && password) {
-        // Store role for demo purposes
-        const role = email.includes("admin") ? "admin" : email.includes("scorer") ? "scorer" : "parent";
-        localStorage.setItem("userRole", role);
-        localStorage.setItem("userName", email.split("@")[0]);
-        router.push("/" + role);
-      } else {
-        setError("Por favor ingresa email y contraseña");
+      const data = await response.json();
+
+      if (!response.ok || !data.ok) {
+        setError(data.message || "No se pudo iniciar sesión");
+        return;
       }
+
+      localStorage.setItem("userRole", data.user.rol);
+      localStorage.setItem("userName", data.user.nombre);
+      localStorage.setItem("userEmail", data.user.email);
+      router.push(data.redirectTo || "/");
+    } catch {
+      setError("No se pudo iniciar sesión");
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
+  };
+
+  const handleDemoLogin = (role: string) => {
+    const demoEmails: Record<string, string> = {
+      admin: "admin@ligakids.cl",
+      scorer: "planillero@ligakids.cl",
+    };
+    setEmail(demoEmails[role] || "");
+    setPassword("demo123");
   };
 
   return (
@@ -58,6 +76,9 @@ export default function LoginPage() {
           <h2 className="text-lg font-semibold text-text-primary text-center">
             Iniciar Sesión
           </h2>
+          <p className="text-xs text-text-muted text-center">
+            Accede como administrador o planillero
+          </p>
         </CardHeader>
         <form onSubmit={handleLogin}>
           <CardContent className="space-y-4">
@@ -100,33 +121,33 @@ export default function LoginPage() {
       <Card className="w-full max-w-sm mt-6">
         <CardContent className="p-4">
           <p className="text-xs text-text-muted text-center mb-3">
-            Demo: usa cualquier email para entrar como:
+            Demo: selecciona un rol para ingresar
           </p>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-2 gap-3">
             <button
-              onClick={() => { setEmail("admin@test.com"); setPassword("123"); }}
-              className="flex flex-col items-center gap-1 p-3 rounded-lg bg-bg-tertiary hover:bg-bg-secondary transition-colors"
+              onClick={() => handleDemoLogin("admin")}
+              className="flex flex-col items-center gap-1 p-4 rounded-lg bg-bg-tertiary hover:bg-bg-secondary transition-colors border-2 border-transparent hover:border-accent"
             >
-              <Shield className="w-5 h-5 text-accent" />
-              <span className="text-xs font-medium">Admin</span>
+              <Shield className="w-6 h-6 text-accent" />
+              <span className="text-sm font-medium">Administrador</span>
+              <span className="text-xs text-text-muted">Gestionar liga</span>
             </button>
             <button
-              onClick={() => { setEmail("scorer@test.com"); setPassword("123"); }}
-              className="flex flex-col items-center gap-1 p-3 rounded-lg bg-bg-tertiary hover:bg-bg-secondary transition-colors"
+              onClick={() => handleDemoLogin("scorer")}
+              className="flex flex-col items-center gap-1 p-4 rounded-lg bg-bg-tertiary hover:bg-bg-secondary transition-colors border-2 border-transparent hover:border-success"
             >
-              <Clipboard className="w-5 h-5 text-success" />
-              <span className="text-xs font-medium">Scorer</span>
-            </button>
-            <button
-              onClick={() => { setEmail("parent@test.com"); setPassword("123"); }}
-              className="flex flex-col items-center gap-1 p-3 rounded-lg bg-bg-tertiary hover:bg-bg-secondary transition-colors"
-            >
-              <Users className="w-5 h-5 text-warning" />
-              <span className="text-xs font-medium">Padre</span>
+              <Clipboard className="w-6 h-6 text-success" />
+              <span className="text-sm font-medium">Planillero</span>
+              <span className="text-xs text-text-muted">Registrar goles</span>
             </button>
           </div>
         </CardContent>
       </Card>
+
+      {/* Back to home */}
+      <Link href="/" className="mt-6 text-sm text-text-muted hover:text-accent">
+        ← Ver como padre/espectador
+      </Link>
     </div>
   );
 }

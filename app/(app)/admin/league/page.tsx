@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { useMutation, useQuery } from "convex/react";
+import { api } from "../../../../convex/_generated/api";
 import { Header } from "@/components/ui/header";
 import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -9,14 +11,20 @@ import { Badge } from "@/components/ui/badge";
 import { Plus, Edit2, Trash2, Trophy, ChevronRight } from "lucide-react";
 import Link from "next/link";
 
-// Demo data
-const leagues = [
-  { id: "1", name: "Liga Infantil A", category: "A", season: "2024-1", teamCount: 8 },
-  { id: "2", name: "Liga Infantil B", category: "B", season: "2024-1", teamCount: 8 },
-];
-
 export default function LeaguePage() {
   const [showForm, setShowForm] = useState(false);
+  const [nombre, setNombre] = useState("");
+  const ligas = useQuery(api.api.listLigas) || [];
+  const categorias = useQuery(api.api.listCategorias, {}) || [];
+  const createLiga = useMutation(api.api.createLiga);
+  const countCategorias = (ligaId: string) =>
+    categorias.filter((c: any) => c.ligaId === ligaId).length;
+  const handleCreate = async () => {
+    if (!nombre.trim()) return;
+    await createLiga({ nombre: nombre.trim(), descripcion: undefined, temporada: undefined });
+    setNombre("");
+    setShowForm(false);
+  };
 
   return (
     <div className="min-h-screen bg-bg-secondary">
@@ -36,17 +44,13 @@ export default function LeaguePage() {
               <h3 className="font-semibold text-text-primary">Crear Nueva Liga</h3>
             </CardHeader>
             <CardContent className="space-y-4">
-              <Input label="Nombre de la Liga" placeholder="Liga Infantil A" />
-              <div className="grid grid-cols-2 gap-3">
-                <Input label="Categoría" placeholder="A" />
-                <Input label="Temporada" placeholder="2024-1" />
-              </div>
+              <Input label="Nombre de la Liga/Categoría" placeholder="Sub-12" value={nombre} onChange={(e) => setNombre(e.target.value)} />
             </CardContent>
             <CardFooter>
               <Button variant="secondary" onClick={() => setShowForm(false)} className="flex-1">
                 Cancelar
               </Button>
-              <Button className="flex-1">
+              <Button className="flex-1" onClick={handleCreate}>
                 Crear
               </Button>
             </CardFooter>
@@ -55,18 +59,19 @@ export default function LeaguePage() {
 
         {/* League List */}
         <div className="space-y-3">
-          {leagues.map((league) => (
-            <Card key={league.id} hover>
-              <CardContent className="p-4">
+          {ligas.map((league: any) => (
+            <Link key={league._id} href={`/admin/league/${league._id}`} className="block">
+              <Card hover>
+                <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 rounded-xl bg-accent-light flex items-center justify-center">
                       <Trophy className="w-6 h-6 text-accent" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-text-primary">{league.name}</h3>
+                      <h3 className="font-semibold text-text-primary">{league.nombre}</h3>
                       <p className="text-sm text-text-muted">
-                        Categoría {league.category} • {league.teamCount} equipos
+                        {countCategorias(league._id)} categorías
                       </p>
                     </div>
                   </div>
@@ -74,23 +79,24 @@ export default function LeaguePage() {
                 </div>
                 
                 <div className="flex items-center gap-2 mt-3 pt-3 border-t border-border">
-                  <Badge variant="completed">{league.season}</Badge>
-                  <Link href={`/admin/league/${league.id}`} className="ml-auto">
+                  <Badge variant="completed">Activa</Badge>
+                  <div className="ml-auto">
                     <Button variant="ghost" size="sm">
                       <Edit2 className="w-4 h-4" />
                     </Button>
-                  </Link>
+                  </div>
                   <Button variant="ghost" size="sm" className="text-error hover:text-error hover:bg-error/10">
                     <Trash2 className="w-4 h-4" />
                   </Button>
                 </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </Link>
           ))}
         </div>
 
         {/* Empty State */}
-        {leagues.length === 0 && (
+        {ligas.length === 0 && (
           <Card>
             <CardContent className="p-8 text-center">
               <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-bg-tertiary flex items-center justify-center">

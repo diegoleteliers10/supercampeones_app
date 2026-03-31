@@ -1,60 +1,68 @@
 "use client";
 
 import { useState } from "react";
+import { useMutation, useQuery } from "convex/react";
+import { api } from "../../../../convex/_generated/api";
 import { Header } from "@/components/ui/header";
 import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
 import { Avatar } from "@/components/ui/avatar";
 import { Plus, Edit2, Trash2, Users, X, Shirt } from "lucide-react";
 
-// Demo data
-const teams = [
-  { id: "1", name: "Los Tigres", group: "1", category: "A", primaryColor: "#F59E0B", playerCount: 12 },
-  { id: "2", name: "Real Niños", group: "1", category: "A", primaryColor: "#2563EB", playerCount: 10 },
-  { id: "3", name: "Atlético Chiquito", group: "2", category: "A", primaryColor: "#10B981", playerCount: 11 },
-  { id: "4", name: "Barcelona Kids", group: "2", category: "A", primaryColor: "#DC2626", playerCount: 9 },
-];
-
-const categories = [
-  { value: "A", label: "Categoría A" },
-  { value: "B", label: "Categoría B" },
-  { value: "C", label: "Categoría C" },
-];
-
-const groups = [
-  { value: "1", label: "Grupo 1" },
-  { value: "2", label: "Grupo 2" },
-  { value: "3", label: "Grupo 3" },
-  { value: "4", label: "Grupo 4" },
-];
-
 export default function TeamsPage() {
   const [showForm, setShowForm] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("A");
-
-  const filteredTeams = teams.filter(t => t.category === selectedCategory);
+  const [editingTeamId, setEditingTeamId] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [form, setForm] = useState({ nombre: "", ligaId: "", categoriaId: "" });
+  const [assignGrupoByTeam, setAssignGrupoByTeam] = useState<Record<string, string>>({});
+  const ligas = useQuery(api.api.listLigas) || [];
+  const categorias = useQuery(api.api.listCategorias, {}) || [];
+  const grupos = useQuery(api.api.listGrupos, {}) || [];
+  const equipos = useQuery(api.api.listEquipos, selectedCategory ? { categoriaId: selectedCategory as any } : {}) || [];
+  const createEquipo = useMutation(api.api.createEquipo);
+  const assignEquipoToGrupo = useMutation(api.api.assignEquipoToGrupo);
+  const allGrupos = useQuery(api.api.listGrupos, {}) || [];
+  const getGrupoById = (id: string) => allGrupos.find((g: any) => g._id === id);
+  const handleCreate = async () => {
+    if (!form.nombre || !form.categoriaId) return;
+    await createEquipo({
+      nombre: form.nombre,
+      categoriaId: form.categoriaId as any,
+    });
+    setShowForm(false);
+    setForm({ nombre: "", ligaId: "", categoriaId: "" });
+  };
 
   return (
     <div className="min-h-screen bg-bg-secondary">
-      <Header title="Equipos" subtitle={`${filteredTeams.length} equipos`} />
+      <Header title="Equipos" subtitle={`${equipos.length} equipos`} />
 
       <div className="p-4 space-y-4">
         {/* Category Filter */}
         <div className="flex gap-2 overflow-x-auto pb-2">
-          {categories.map((cat) => (
+          <button
+            onClick={() => setSelectedCategory(null)}
+            className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
+              !selectedCategory
+                ? "bg-accent text-white"
+                : "bg-white text-text-secondary border border-border hover:bg-bg-secondary"
+            }`}
+          >
+            Todas
+          </button>
+          {categorias.map((cat: any) => (
             <button
-              key={cat.value}
-              onClick={() => setSelectedCategory(cat.value)}
+              key={cat._id}
+              onClick={() => setSelectedCategory(cat._id)}
               className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
-                selectedCategory === cat.value
+                selectedCategory === cat._id
                   ? "bg-accent text-white"
                   : "bg-white text-text-secondary border border-border hover:bg-bg-secondary"
               }`}
             >
-              {cat.label}
+              {cat.nombre}
             </button>
           ))}
         </div>
@@ -75,37 +83,27 @@ export default function TeamsPage() {
               </Button>
             </CardHeader>
             <CardContent className="space-y-4">
-              <Input label="Nombre del Equipo" placeholder="Los Tigres" />
+              <Input label="Nombre del Equipo" placeholder="Los Tigres" value={form.nombre} onChange={(e) => setForm((prev) => ({ ...prev, nombre: e.target.value }))} />
               <div className="grid grid-cols-2 gap-3">
+                <Select 
+                  label="Liga"
+                  options={ligas.map((l: any) => ({ value: l._id, label: l.nombre }))}
+                  value={form.ligaId}
+                  onChange={(e) => setForm((prev) => ({ ...prev, ligaId: e.target.value, categoriaId: "" }))}
+                />
                 <Select 
                   label="Categoría" 
-                  options={categories} 
-                  value="A"
-                  onChange={() => {}} 
+                  options={categorias.filter((c: any) => !form.ligaId || c.ligaId === form.ligaId).map((c: any) => ({ value: c._id, label: c.nombre }))}
+                  value={form.categoriaId}
+                  onChange={(e) => setForm((prev) => ({ ...prev, categoriaId: e.target.value }))} 
                 />
-                <Select 
-                  label="Grupo" 
-                  options={groups}
-                  value="1"
-                  onChange={() => {}} 
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-sm font-medium text-text-primary mb-1.5">Color Primario</label>
-                  <input type="color" defaultValue="#F59E0B" className="w-full h-11 rounded-lg border border-border cursor-pointer" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-text-primary mb-1.5">Color Secundario</label>
-                  <input type="color" defaultValue="#FFFFFF" className="w-full h-11 rounded-lg border border-border cursor-pointer" />
-                </div>
               </div>
             </CardContent>
             <CardFooter>
               <Button variant="secondary" onClick={() => setShowForm(false)} className="flex-1">
                 Cancelar
               </Button>
-              <Button className="flex-1">
+              <Button className="flex-1" onClick={handleCreate}>
                 Crear
               </Button>
             </CardFooter>
@@ -114,24 +112,32 @@ export default function TeamsPage() {
 
         {/* Teams List */}
         <div className="space-y-3">
-          {filteredTeams.map((team) => (
-            <Card key={team.id} hover>
+          {equipos.map((team: any) => (
+            <Card key={team._id} hover>
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
                   <Avatar 
-                    name={team.name} 
+                    name={team.nombre}
                     size="lg"
                     className="text-white"
-                    style={{ backgroundColor: team.primaryColor }}
+                    style={{ backgroundColor: "#F59E0B" }}
                   />
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-semibold text-text-primary truncate">{team.name}</h3>
-                    <p className="text-sm text-text-muted">
-                      Grupo {team.group} • {team.playerCount} jugadores
-                    </p>
+                    <h3 className="font-semibold text-text-primary truncate">{team.nombre}</h3>
+                    {editingTeamId === team._id && (
+                      <p className="text-sm text-text-muted">
+                        Grupo {team.grupoId ? getGrupoById(team.grupoId)?.nombre || "-" : "Sin grupo"}
+                      </p>
+                    )}
                   </div>
                   <div className="flex items-center gap-1">
-                    <Button variant="ghost" size="sm">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() =>
+                        setEditingTeamId((prev) => (prev === team._id ? null : team._id))
+                      }
+                    >
                       <Edit2 className="w-4 h-4" />
                     </Button>
                     <Button variant="ghost" size="sm" className="text-error hover:text-error hover:bg-error/10">
@@ -140,25 +146,46 @@ export default function TeamsPage() {
                   </div>
                 </div>
 
-                {/* Players Preview */}
+                {editingTeamId === team._id && (
                 <div className="mt-3 pt-3 border-t border-border">
                   <div className="flex items-center gap-2">
                     <Shirt className="w-4 h-4 text-text-muted" />
                     <span className="text-xs text-text-muted">
-                      {team.playerCount} jugadores registrados
+                      Plantilla conectada a Convex
                     </span>
-                    <Button variant="ghost" size="sm" className="ml-auto text-xs">
-                      Ver roster
+                  </div>
+                  <div className="mt-2 flex items-center gap-2">
+                    <div className="flex-1">
+                      <Select
+                        options={grupos
+                          .filter((g: any) => g.categoriaId === team.categoriaId)
+                          .map((g: any) => ({ value: g._id, label: g.nombre }))}
+                        placeholder="Asignar grupo"
+                        value={assignGrupoByTeam[team._id] || ""}
+                        onChange={(e) => setAssignGrupoByTeam((prev) => ({ ...prev, [team._id]: e.target.value }))}
+                      />
+                    </div>
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      onClick={async () => {
+                        const grupoId = assignGrupoByTeam[team._id];
+                        if (!grupoId) return;
+                        await assignEquipoToGrupo({ equipoId: team._id, grupoId: grupoId as any });
+                      }}
+                    >
+                      Asignar
                     </Button>
                   </div>
                 </div>
+                )}
               </CardContent>
             </Card>
           ))}
         </div>
 
         {/* Empty State */}
-        {filteredTeams.length === 0 && (
+        {equipos.length === 0 && (
           <Card>
             <CardContent className="p-8 text-center">
               <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-bg-tertiary flex items-center justify-center">

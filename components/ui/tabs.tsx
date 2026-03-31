@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { createContext, useContext } from "react";
 
 interface TabsProps {
   value: string;
@@ -20,11 +21,20 @@ interface TabsTriggerProps {
   className?: string;
 }
 
+interface TabsContextValue {
+  value: string;
+  onValueChange: (value: string) => void;
+}
+
+const TabsContext = createContext<TabsContextValue | null>(null);
+
 function Tabs({ value, onValueChange, children, className }: TabsProps) {
   return (
-    <div className={className} data-value={value}>
-      {children}
-    </div>
+    <TabsContext.Provider value={{ value, onValueChange }}>
+      <div className={className} data-value={value}>
+        {children}
+      </div>
+    </TabsContext.Provider>
   );
 }
 
@@ -40,13 +50,16 @@ function TabsList({ children, className }: TabsListProps) {
 }
 
 function TabsTrigger({ value, children, className }: TabsTriggerProps) {
-  // Note: In a real implementation, this would use context
-  // For now, we'll use a simple class-based approach
+  const tabsContext = useContext(TabsContext);
+  const isActive = tabsContext?.value === value;
+
   return (
     <button
       type="button"
       role="tab"
-      data-state="active"
+      data-state={isActive ? "active" : "inactive"}
+      aria-selected={isActive}
+      onClick={() => tabsContext?.onValueChange(value)}
       className={cn(
         "flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-all",
         "data-[state=active]:bg-white data-[state=active]:text-text-primary data-[state=active]:shadow-sm",

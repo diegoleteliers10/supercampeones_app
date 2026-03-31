@@ -15,7 +15,7 @@ export function BottomNav() {
   const pathname = usePathname();
   
   // Determine role from pathname
-  let navItems: NavItem[];
+  let navItems: NavItem[] | null = null;
   if (pathname.startsWith("/admin")) {
     navItems = [
       { label: "Inicio", href: "/admin", icon: <Home className="w-5 h-5" /> },
@@ -28,14 +28,9 @@ export function BottomNav() {
       { label: "Partidos", href: "/scorer", icon: <ClipboardList className="w-5 h-5" /> },
       { label: "Historial", href: "/scorer/history", icon: <History className="w-5 h-5" /> },
     ];
-  } else {
-    navItems = [
-      { label: "Inicio", href: "/parent", icon: <Home className="w-5 h-5" /> },
-      { label: "Tabla", href: "/parent/standings", icon: <Trophy className="w-5 h-5" /> },
-      { label: "Resultados", href: "/parent/results", icon: <Calendar className="w-5 h-5" /> },
-      { label: "Próximos", href: "/parent/schedule", icon: <ClipboardList className="w-5 h-5" /> },
-    ];
   }
+
+  if (!navItems) return null;
 
   return (
     <nav className={cn(
@@ -45,7 +40,16 @@ export function BottomNav() {
     )}>
       <div className="flex items-center justify-around h-16">
         {navItems.map((item) => {
-          const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+          const isAdminHomeItem = item.href === "/admin";
+          const isScorerPartidosItem = item.href === "/scorer";
+          const isScorerHistoryItem = item.href === "/scorer/history";
+          const isActive = isAdminHomeItem
+            ? pathname === "/admin"
+            : isScorerPartidosItem
+              ? pathname === "/scorer" || pathname.startsWith("/scorer/match/")
+              : isScorerHistoryItem
+                ? pathname === "/scorer/history" || pathname.startsWith("/scorer/history/")
+                : pathname === item.href || pathname.startsWith(item.href + "/");
           
           return (
             <Link

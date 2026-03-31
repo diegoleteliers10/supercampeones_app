@@ -12,8 +12,8 @@ export const metadata: Metadata = {
     title: "LigaKids",
   },
   icons: {
-    icon: "/icons/icon-192.png",
-    apple: "/icons/icon-512.png",
+    icon: "/icons/icon.svg",
+    apple: "/icons/icon.svg",
   },
 };
 

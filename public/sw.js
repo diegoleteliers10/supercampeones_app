@@ -2,8 +2,7 @@ const CACHE_NAME = 'ligakids-v1';
 const STATIC_ASSETS = [
   '/',
   '/manifest.json',
-  '/icons/icon-192.png',
-  '/icons/icon-512.png',
+  '/icons/icon.svg',
 ];
 
 // Install event - cache static assets
@@ -78,8 +77,8 @@ self.addEventListener('push', (event) => {
     const data = event.data.json();
     self.registration.showNotification(data.title, {
       body: data.body,
-      icon: '/icons/icon-192.png',
-      badge: '/icons/icon-192.png',
+      icon: '/icons/icon.svg',
+      badge: '/icons/icon.svg',
     });
   }
 });

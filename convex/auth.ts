@@ -1,3 +1,3 @@
-import { auth as convexAuth } from "@convex-dev/auth";
+import { convexAuth } from "@convex-dev/auth/server";
 
 export const { authTable, auth, getSessionId, currentUser, storage } = convexAuth;

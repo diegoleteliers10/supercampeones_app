@@ -13,10 +13,12 @@ interface HeaderProps {
     avatarUrl?: string;
   };
   onMenuClick?: () => void;
+  onBackClick?: () => void;
+  showBackButton?: boolean;
   className?: string;
 }
 
-export function Header({ title, subtitle, user, onMenuClick, className }: HeaderProps) {
+export function Header({ title, subtitle, user, onMenuClick, onBackClick, showBackButton, className }: HeaderProps) {
   return (
     <header className={cn(
       "sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-border",
@@ -25,7 +27,16 @@ export function Header({ title, subtitle, user, onMenuClick, className }: Header
     )}>
       {/* Left: Menu button or back */}
       <div className="w-10">
-        {onMenuClick && (
+        {showBackButton ? (
+          <button
+            onClick={onBackClick}
+            className="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-bg-secondary transition-colors"
+          >
+            <svg className="w-5 h-5 text-text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+        ) : onMenuClick && (
           <button
             onClick={onMenuClick}
             className="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-bg-secondary transition-colors"

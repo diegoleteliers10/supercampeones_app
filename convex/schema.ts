@@ -14,11 +14,20 @@ export default defineSchema({
   })
     .index("by_email", ["email"]),
 
-  categorias: defineTable({
+  ligas: defineTable({
     nombre: v.string(),
+    temporada: v.optional(v.string()),
     descripcion: v.optional(v.string()),
     createdAt: v.number(),
   }),
+
+  categorias: defineTable({
+    ligaId: v.optional(v.id("ligas")),
+    nombre: v.string(),
+    descripcion: v.optional(v.string()),
+    createdAt: v.number(),
+  })
+    .index("by_liga", ["ligaId"]),
 
   grupos: defineTable({
     nombre: v.string(),
@@ -30,7 +39,7 @@ export default defineSchema({
   equipos: defineTable({
     nombre: v.string(),
     categoriaId: v.id("categorias"),
-    grupoId: v.id("grupos"),
+    grupoId: v.optional(v.id("grupos")),
     createdAt: v.number(),
   })
     .index("by_categoria", ["categoriaId"])
@@ -40,7 +49,7 @@ export default defineSchema({
     equipoLocalId: v.id("equipos"),
     equipoVisitanteId: v.id("equipos"),
     categoriaId: v.id("categorias"),
-    grupoId: v.id("grupos"),
+    grupoId: v.optional(v.id("grupos")),
     fecha: v.number(),
     ubicacion: v.string(),
     estado: v.union(
@@ -83,5 +92,6 @@ export default defineSchema({
     fairPlayPoints: v.number(),
   })
     .index("by_grupo", ["grupoId"])
-    .index("by_equipo", ["equipoId"]),
+    .index("by_equipo", ["equipoId"])
+    .index("by_equipo_and_grupo", ["equipoId", "grupoId"]),
 });
