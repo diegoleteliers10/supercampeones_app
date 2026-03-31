@@ -9,7 +9,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Avatar } from "@/components/ui/avatar";
-import { Plus, Play, Square, Flag } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  Add01Icon,
+  Flag01Icon,
+  PlayIcon,
+  StopCircleIcon,
+} from "@hugeicons/core-free-icons";
 
 export default function MatchDetailPage(props: { params: Promise<{ id: string }> }) {
   const params = use(props.params);
@@ -80,14 +86,14 @@ export default function MatchDetailPage(props: { params: Promise<{ id: string }>
 
         {!isMatchActive && !isMatchCompleted && (
           <Button onClick={() => syncScore("en_curso")} size="lg" className="w-full">
-            <Play className="w-5 h-5" />
+            <HugeiconsIcon icon={PlayIcon} className="w-5 h-5" />
             Iniciar Partido
           </Button>
         )}
 
         {isMatchActive && (
           <Button onClick={() => syncScore("finalizado")} variant="secondary" size="lg" className="w-full">
-            <Square className="w-5 h-5" />
+            <HugeiconsIcon icon={StopCircleIcon} className="w-5 h-5" />
             Finalizar Partido
           </Button>
         )}
@@ -96,7 +102,7 @@ export default function MatchDetailPage(props: { params: Promise<{ id: string }>
           <Card>
             <CardContent className="p-4 space-y-3">
               <h2 className="font-semibold text-text-primary flex items-center gap-2">
-                <Flag className="w-5 h-5 text-accent" />
+                <HugeiconsIcon icon={Flag01Icon} className="w-5 h-5 text-accent" />
                 Registrar Gol
               </h2>
               <Input
@@ -125,7 +131,7 @@ export default function MatchDetailPage(props: { params: Promise<{ id: string }>
                     setGoalForm({ playerName: "", minute: "" });
                   }}
                 >
-                  <Plus className="w-4 h-4" />
+                  <HugeiconsIcon icon={Add01Icon} className="w-4 h-4" />
                   Gol Local
                 </Button>
                 <Button
@@ -142,7 +148,7 @@ export default function MatchDetailPage(props: { params: Promise<{ id: string }>
                     setGoalForm({ playerName: "", minute: "" });
                   }}
                 >
-                  <Plus className="w-4 h-4" />
+                  <HugeiconsIcon icon={Add01Icon} className="w-4 h-4" />
                   Gol Visita
                 </Button>
               </div>

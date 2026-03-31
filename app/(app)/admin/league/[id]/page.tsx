@@ -8,7 +8,12 @@ import { Header } from "@/components/ui/header";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ChevronRight, FolderTree, Users } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  ArrowRight01Icon,
+  FolderTreeIcon,
+  UserGroupIcon,
+} from "@hugeicons/core-free-icons";
 
 export default function LeagueDetailPage() {
   const params = useParams<{ id: string }>();
@@ -33,7 +38,7 @@ export default function LeagueDetailPage() {
         {categorias.length === 0 && (
           <Card>
             <CardContent className="p-6 text-center">
-              <FolderTree className="w-10 h-10 mx-auto mb-2 text-text-muted" />
+              <HugeiconsIcon icon={FolderTreeIcon} className="w-10 h-10 mx-auto mb-2 text-text-muted" />
               <p className="text-sm text-text-muted">Esta liga aún no tiene categorías.</p>
               <Link href="/admin">
                 <Button className="mt-3" size="sm">Crear categoría</Button>
@@ -79,10 +84,10 @@ export default function LeagueDetailPage() {
                           {equiposGrupo.map((equipo: any) => (
                             <div key={equipo._id} className="flex items-center justify-between py-1">
                               <div className="flex items-center gap-2">
-                                <Users className="w-4 h-4 text-text-muted" />
+                                <HugeiconsIcon icon={UserGroupIcon} className="w-4 h-4 text-text-muted" />
                                 <span className="text-sm text-text-primary">{equipo.nombre}</span>
                               </div>
-                              <ChevronRight className="w-4 h-4 text-text-muted" />
+                              <HugeiconsIcon icon={ArrowRight01Icon} className="w-4 h-4 text-text-muted" />
                             </div>
                           ))}
                         </div>

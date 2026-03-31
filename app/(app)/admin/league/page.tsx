@@ -8,7 +8,14 @@ import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Edit2, Trash2, Trophy, ChevronRight } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  Add01Icon,
+  ArrowRight01Icon,
+  CrownIcon,
+  Delete02Icon,
+  Edit02Icon,
+} from "@hugeicons/core-free-icons";
 import Link from "next/link";
 
 export default function LeaguePage() {
@@ -33,7 +40,7 @@ export default function LeaguePage() {
       <div className="p-4 space-y-4">
         {/* Add League Button */}
         <Button onClick={() => setShowForm(!showForm)} className="w-full" size="lg">
-          <Plus className="w-5 h-5" />
+          <HugeiconsIcon icon={Add01Icon} className="w-5 h-5" />
           Nueva Liga
         </Button>
 
@@ -66,7 +73,7 @@ export default function LeaguePage() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="w-12 h-12 rounded-xl bg-accent-light flex items-center justify-center">
-                      <Trophy className="w-6 h-6 text-accent" />
+                      <HugeiconsIcon icon={CrownIcon} className="w-6 h-6 text-accent" />
                     </div>
                     <div>
                       <h3 className="font-semibold text-text-primary">{league.nombre}</h3>
@@ -75,18 +82,18 @@ export default function LeaguePage() {
                       </p>
                     </div>
                   </div>
-                  <ChevronRight className="w-5 h-5 text-text-muted" />
+                  <HugeiconsIcon icon={ArrowRight01Icon} className="w-5 h-5 text-text-muted" />
                 </div>
                 
                 <div className="flex items-center gap-2 mt-3 pt-3 border-t border-border">
                   <Badge variant="completed">Activa</Badge>
                   <div className="ml-auto">
                     <Button variant="ghost" size="sm">
-                      <Edit2 className="w-4 h-4" />
+                      <HugeiconsIcon icon={Edit02Icon} className="w-4 h-4" />
                     </Button>
                   </div>
                   <Button variant="ghost" size="sm" className="text-error hover:text-error hover:bg-error/10">
-                    <Trash2 className="w-4 h-4" />
+                    <HugeiconsIcon icon={Delete02Icon} className="w-4 h-4" />
                   </Button>
                 </div>
                 </CardContent>
@@ -100,14 +107,14 @@ export default function LeaguePage() {
           <Card>
             <CardContent className="p-8 text-center">
               <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-bg-tertiary flex items-center justify-center">
-                <Trophy className="w-8 h-8 text-text-muted" />
+                <HugeiconsIcon icon={CrownIcon} className="w-8 h-8 text-text-muted" />
               </div>
               <h3 className="font-semibold text-text-primary mb-1">No hay ligas</h3>
               <p className="text-sm text-text-muted mb-4">
                 Crea tu primera liga para comenzar a gestionar torneos
               </p>
               <Button onClick={() => setShowForm(true)}>
-                <Plus className="w-4 h-4" />
+                <HugeiconsIcon icon={Add01Icon} className="w-4 h-4" />
                 Crear Liga
               </Button>
             </CardContent>

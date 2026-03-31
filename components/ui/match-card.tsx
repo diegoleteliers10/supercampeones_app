@@ -1,27 +1,51 @@
-"use client";
+"use client"
 
-import { cn } from "@/lib/utils";
-import { Badge } from "./badge";
-import { Avatar } from "./avatar";
+import { cn } from "@/lib/utils"
+import { Badge } from "./badge"
+import { Avatar, AvatarFallback, AvatarImage } from "./avatar"
+import { Card, CardContent } from "./card"
 
 interface MatchCardProps {
   localTeam: {
-    name: string;
-    logoUrl?: string;
-    primaryColor?: string;
-  };
+    name: string
+    logoUrl?: string
+    primaryColor?: string
+  }
   visitorTeam: {
-    name: string;
-    logoUrl?: string;
-    primaryColor?: string;
-  };
-  scoreLocal?: number;
-  scoreVisitor?: number;
-  status: "upcoming" | "live" | "completed" | "blocked";
-  time?: string;
-  field?: string;
-  onClick?: () => void;
-  className?: string;
+    name: string
+    logoUrl?: string
+    primaryColor?: string
+  }
+  scoreLocal?: number
+  scoreVisitor?: number
+  status: "upcoming" | "live" | "completed" | "blocked"
+  time?: string
+  field?: string
+  onClick?: () => void
+  className?: string
+}
+
+const statusVariantMap = {
+  upcoming: "outline" as const,
+  live: "default" as const,
+  completed: "secondary" as const,
+  blocked: "destructive" as const,
+}
+
+const statusLabelMap = {
+  upcoming: "Próximo",
+  live: "En Vivo",
+  completed: "Finalizado",
+  blocked: "Bloqueado",
+}
+
+function getInitials(name: string) {
+  return name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2)
 }
 
 export function MatchCard({
@@ -35,99 +59,135 @@ export function MatchCard({
   onClick,
   className,
 }: MatchCardProps) {
-  const isLive = status === "live";
-  const isCompleted = status === "completed";
-  const showScore = isLive || isCompleted;
+  const isLive = status === "live"
+  const isCompleted = status === "completed"
+  const showScore = isLive || isCompleted
 
   return (
-    <div
-      onClick={onClick}
+    <Card
       className={cn(
-        "w-full bg-white border border-border rounded-2xl p-3.5 sm:p-4 shadow-sm transition-all duration-200",
-        onClick && "cursor-pointer card-hover",
+        "w-full",
+        onClick && "cursor-pointer hover:shadow-md transition-shadow",
         className
       )}
+      onClick={onClick}
     >
-      {/* Status badge and time */}
-      <div className="flex items-center justify-between mb-3">
-        <Badge variant={status}>
-          {isLive && <span className="w-1.5 h-1.5 bg-green-500 rounded-full mr-1 animate-pulse" />}
-          {status === "upcoming" ? "Próximo" : status === "live" ? "En Vivo" : status === "completed" ? "Finalizado" : "Bloqueado"}
-        </Badge>
-        {time && (
-          <span className="text-lg font-semibold font-mono tracking-tight text-text-secondary">
-            {time}
-          </span>
-        )}
-      </div>
-
-      {/* Teams and Score */}
-      <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 sm:gap-3">
-        {/* Local Team */}
-        <div className="min-w-0 flex items-center gap-2.5">
-          <Avatar
-            name={localTeam.name}
-            src={localTeam.logoUrl}
-            size="md"
-            style={localTeam.primaryColor ? { backgroundColor: localTeam.primaryColor + "20", color: localTeam.primaryColor } : undefined}
-          />
-          <div className="min-w-0 flex-1">
-            <p className="font-semibold text-[clamp(0.95rem,3.5vw,1.1rem)] leading-tight text-text-primary truncate">
-              {localTeam.name}
-            </p>
-          </div>
-        </div>
-
-        {/* Score */}
-        <div className={cn(
-          "px-1 sm:px-2 flex items-center gap-1.5 sm:gap-2 justify-center",
-          isLive && "animate-scale-pop"
-        )}>
-          {showScore ? (
-            <>
-              <span className={cn(
-                "text-[clamp(1.7rem,7vw,2.1rem)] leading-none font-bold font-mono",
-                scoreLocal! > scoreVisitor! ? "text-success" : scoreLocal! < scoreVisitor! ? "text-text-primary" : "text-text-secondary"
-              )}>
-                {scoreLocal}
-              </span>
-              <span className="text-lg sm:text-xl text-text-muted">-</span>
-              <span className={cn(
-                "text-[clamp(1.7rem,7vw,2.1rem)] leading-none font-bold font-mono",
-                scoreVisitor! > scoreLocal! ? "text-success" : scoreLocal! < scoreVisitor! ? "text-text-primary" : "text-text-secondary"
-              )}>
-                {scoreVisitor}
-              </span>
-            </>
-          ) : (
-            <span className="text-xl sm:text-2xl uppercase tracking-wide text-text-muted font-medium">vs</span>
+      <CardContent className="p-4">
+        <div className="flex items-center justify-between mb-3">
+          <Badge variant={statusVariantMap[status]}>
+            {isLive && (
+              <span className="w-1.5 h-1.5 bg-green-500 rounded-full mr-1 animate-pulse" />
+            )}
+            {statusLabelMap[status]}
+          </Badge>
+          {time && (
+            <span className="text-lg font-semibold font-mono tracking-tight text-muted-foreground">
+              {time}
+            </span>
           )}
         </div>
 
-        {/* Visitor Team */}
-        <div className="min-w-0 flex items-center gap-2.5 justify-end">
-          <div className="min-w-0 flex-1 text-right">
-            <p className="font-semibold text-[clamp(0.95rem,3.5vw,1.1rem)] leading-tight text-text-primary truncate">
-              {visitorTeam.name}
+        <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 sm:gap-3">
+          <div className="min-w-0 flex items-center gap-2.5">
+            <Avatar
+              style={
+                localTeam.primaryColor
+                  ? {
+                      backgroundColor: localTeam.primaryColor + "20",
+                      color: localTeam.primaryColor,
+                    }
+                  : undefined
+              }
+            >
+              {localTeam.logoUrl && (
+                <AvatarImage src={localTeam.logoUrl} alt={localTeam.name} />
+              )}
+              <AvatarFallback>{getInitials(localTeam.name)}</AvatarFallback>
+            </Avatar>
+            <div className="min-w-0 flex-1">
+              <p className="font-semibold text-sm leading-tight truncate">
+                {localTeam.name}
+              </p>
+            </div>
+          </div>
+
+          <div
+            className={cn(
+              "px-1 sm:px-2 flex items-center gap-1.5 sm:gap-2 justify-center",
+              isLive && "animate-pulse"
+            )}
+          >
+            {showScore ? (
+              <>
+                <span
+                  className={cn(
+                    "text-2xl sm:text-3xl leading-none font-bold font-mono",
+                    scoreLocal != null && scoreVisitor != null
+                      ? scoreLocal > scoreVisitor
+                        ? "text-green-600"
+                        : scoreLocal < scoreVisitor
+                          ? "text-foreground"
+                          : "text-muted-foreground"
+                      : "text-foreground"
+                  )}
+                >
+                  {scoreLocal}
+                </span>
+                <span className="text-lg sm:text-xl text-muted-foreground">-</span>
+                <span
+                  className={cn(
+                    "text-2xl sm:text-3xl leading-none font-bold font-mono",
+                    scoreLocal != null && scoreVisitor != null
+                      ? scoreVisitor > scoreLocal
+                        ? "text-green-600"
+                        : scoreVisitor < scoreLocal
+                          ? "text-foreground"
+                          : "text-muted-foreground"
+                      : "text-foreground"
+                  )}
+                >
+                  {scoreVisitor}
+                </span>
+              </>
+            ) : (
+              <span className="text-xl sm:text-2xl uppercase tracking-wide text-muted-foreground font-medium">
+                vs
+              </span>
+            )}
+          </div>
+
+          <div className="min-w-0 flex items-center gap-2.5 justify-end">
+            <div className="min-w-0 flex-1 text-right">
+              <p className="font-semibold text-sm leading-tight truncate">
+                {visitorTeam.name}
+              </p>
+            </div>
+            <Avatar
+              style={
+                visitorTeam.primaryColor
+                  ? {
+                      backgroundColor: visitorTeam.primaryColor + "20",
+                      color: visitorTeam.primaryColor,
+                    }
+                  : undefined
+              }
+            >
+              {visitorTeam.logoUrl && (
+                <AvatarImage src={visitorTeam.logoUrl} alt={visitorTeam.name} />
+              )}
+              <AvatarFallback>{getInitials(visitorTeam.name)}</AvatarFallback>
+            </Avatar>
+          </div>
+        </div>
+
+        {field && (
+          <div className="mt-3 pt-3 border-t border-border/80">
+            <p className="text-sm text-muted-foreground">
+              Campo: <span className="font-medium text-foreground">{field}</span>
             </p>
           </div>
-          <Avatar
-            name={visitorTeam.name}
-            src={visitorTeam.logoUrl}
-            size="md"
-            style={visitorTeam.primaryColor ? { backgroundColor: visitorTeam.primaryColor + "20", color: visitorTeam.primaryColor } : undefined}
-          />
-        </div>
-      </div>
-
-      {/* Field */}
-      {field && (
-        <div className="mt-3 pt-3 border-t border-border/80">
-          <p className="text-sm text-text-muted">
-            Campo: <span className="font-medium text-text-secondary">{field}</span>
-          </p>
-        </div>
-      )}
-    </div>
-  );
+        )}
+      </CardContent>
+    </Card>
+  )
 }

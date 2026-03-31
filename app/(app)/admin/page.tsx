@@ -10,17 +10,18 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Avatar } from "@/components/ui/avatar";
+import { HugeiconsIcon } from "@hugeicons/react";
 import {
-  Calendar,
-  Users,
-  Settings,
-  Plus,
-  Pencil,
-  Trash2,
-  ChevronRight,
-  LogOut,
-  Loader2,
-} from "lucide-react";
+  Add01Icon,
+  ArrowRight01Icon,
+  Calendar01Icon,
+  Delete02Icon,
+  Edit02Icon,
+  LoaderPinwheelIcon,
+  Logout01Icon,
+  Settings01Icon,
+  UserGroupIcon,
+} from "@hugeicons/core-free-icons";
 import Link from "next/link";
 
 export default function AdminDashboard() {
@@ -172,7 +173,7 @@ export default function AdminDashboard() {
               <Card>
                 <CardContent className="p-4 flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-accent-light flex items-center justify-center">
-                    <Settings className="w-5 h-5 text-accent" />
+                    <HugeiconsIcon icon={Settings01Icon} className="w-5 h-5 text-accent" />
                   </div>
                   <div>
                     <p className="text-2xl font-bold font-mono text-text-primary">{stats.categorias}</p>
@@ -184,7 +185,7 @@ export default function AdminDashboard() {
               <Card>
                 <CardContent className="p-4 flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-accent-light flex items-center justify-center">
-                    <Users className="w-5 h-5 text-accent" />
+                    <HugeiconsIcon icon={UserGroupIcon} className="w-5 h-5 text-accent" />
                   </div>
                   <div>
                     <p className="text-2xl font-bold font-mono text-text-primary">{stats.equipos}</p>
@@ -196,7 +197,7 @@ export default function AdminDashboard() {
               <Card>
                 <CardContent className="p-4 flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-success/10 flex items-center justify-center">
-                    <Calendar className="w-5 h-5 text-success" />
+                    <HugeiconsIcon icon={Calendar01Icon} className="w-5 h-5 text-success" />
                   </div>
                   <div>
                     <p className="text-2xl font-bold font-mono text-text-primary">{stats.partidosProgramados}</p>
@@ -208,7 +209,7 @@ export default function AdminDashboard() {
               <Card>
                 <CardContent className="p-4 flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-warning/10 flex items-center justify-center">
-                    <Users className="w-5 h-5 text-warning" />
+                    <HugeiconsIcon icon={UserGroupIcon} className="w-5 h-5 text-warning" />
                   </div>
                   <div>
                     <p className="text-2xl font-bold font-mono text-text-primary">{stats.planilleros}</p>
@@ -224,23 +225,23 @@ export default function AdminDashboard() {
               </h2>
               <div className="grid grid-cols-2 gap-3">
                 <Button variant="secondary" className="h-auto py-4 flex flex-col items-center gap-2" onClick={() => openModal("liga")}>
-                  <Plus className="w-5 h-5" />
+                  <HugeiconsIcon icon={Add01Icon} className="w-5 h-5" />
                   <span className="text-xs">Nueva Liga</span>
                 </Button>
                 <Button variant="secondary" className="h-auto py-4 flex flex-col items-center gap-2" onClick={() => openModal("categoria")}>
-                  <Plus className="w-5 h-5" />
+                  <HugeiconsIcon icon={Add01Icon} className="w-5 h-5" />
                   <span className="text-xs">Nueva Categoría</span>
                 </Button>
                 <Button variant="secondary" className="h-auto py-4 flex flex-col items-center gap-2" onClick={() => openModal("grupo")}>
-                  <Plus className="w-5 h-5" />
+                  <HugeiconsIcon icon={Add01Icon} className="w-5 h-5" />
                   <span className="text-xs">Nuevo Grupo</span>
                 </Button>
                 <Button variant="secondary" className="h-auto py-4 flex flex-col items-center gap-2" onClick={() => openModal("equipo")}>
-                  <Plus className="w-5 h-5" />
+                  <HugeiconsIcon icon={Add01Icon} className="w-5 h-5" />
                   <span className="text-xs">Nuevo Equipo</span>
                 </Button>
                 <Button variant="secondary" className="h-auto py-4 flex flex-col items-center gap-2" onClick={() => openModal("partido")}>
-                  <Plus className="w-5 h-5" />
+                  <HugeiconsIcon icon={Add01Icon} className="w-5 h-5" />
                   <span className="text-xs">Nuevo Partido</span>
                 </Button>
               </div>
@@ -295,7 +296,7 @@ export default function AdminDashboard() {
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-bold text-text-primary">Categorías</h2>
               <Button size="sm" onClick={() => openModal("categoria")}>
-                <Plus className="w-4 h-4" />
+                <HugeiconsIcon icon={Add01Icon} className="w-4 h-4" />
                 Nueva
               </Button>
             </div>
@@ -309,9 +310,9 @@ export default function AdminDashboard() {
                       <p className="text-sm text-text-muted">{cat.descripcion || "Sin descripción"}</p>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Button variant="ghost" size="sm"><Pencil className="w-4 h-4" /></Button>
-                      <Button variant="ghost" size="sm" className="text-error"><Trash2 className="w-4 h-4" /></Button>
-                      <ChevronRight className="w-5 h-5 text-text-muted" />
+                      <Button variant="ghost" size="sm"><HugeiconsIcon icon={Edit02Icon} className="w-4 h-4" /></Button>
+                      <Button variant="ghost" size="sm" className="text-error"><HugeiconsIcon icon={Delete02Icon} className="w-4 h-4" /></Button>
+                      <HugeiconsIcon icon={ArrowRight01Icon} className="w-5 h-5 text-text-muted" />
                     </div>
                   </CardContent>
                 </Card>
@@ -326,7 +327,7 @@ export default function AdminDashboard() {
                     Grupos - {getCategoriaById(selectedCategoria)?.nombre}
                   </h2>
                   <Button size="sm" onClick={() => openModal("grupo")}>
-                    <Plus className="w-4 h-4" />
+                    <HugeiconsIcon icon={Add01Icon} className="w-4 h-4" />
                     Nuevo
                   </Button>
                 </div>
@@ -342,8 +343,8 @@ export default function AdminDashboard() {
                           </p>
                         </div>
                         <div className="flex items-center gap-2">
-                          <Button variant="ghost" size="sm"><Pencil className="w-4 h-4" /></Button>
-                          <Button variant="ghost" size="sm" className="text-error"><Trash2 className="w-4 h-4" /></Button>
+                          <Button variant="ghost" size="sm"><HugeiconsIcon icon={Edit02Icon} className="w-4 h-4" /></Button>
+                          <Button variant="ghost" size="sm" className="text-error"><HugeiconsIcon icon={Delete02Icon} className="w-4 h-4" /></Button>
                         </div>
                       </CardContent>
                     </Card>
@@ -359,7 +360,7 @@ export default function AdminDashboard() {
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-bold text-text-primary">Partidos</h2>
               <Button size="sm" onClick={() => openModal("partido")}>
-                <Plus className="w-4 h-4" />
+                <HugeiconsIcon icon={Add01Icon} className="w-4 h-4" />
                 Nuevo
               </Button>
             </div>
@@ -388,7 +389,7 @@ export default function AdminDashboard() {
                           </Badge>
                           {categoria && <Badge variant="upcoming">{categoria.nombre}</Badge>}
                         </div>
-                        <Button variant="ghost" size="sm"><Pencil className="w-4 h-4" /></Button>
+                        <Button variant="ghost" size="sm"><HugeiconsIcon icon={Edit02Icon} className="w-4 h-4" /></Button>
                       </div>
                       <div className="flex items-center justify-between">
                         <div className="flex-1 text-center">
@@ -426,7 +427,7 @@ export default function AdminDashboard() {
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-bold text-text-primary">Equipos</h2>
               <Button size="sm" onClick={() => openModal("equipo")}>
-                <Plus className="w-4 h-4" />
+                <HugeiconsIcon icon={Add01Icon} className="w-4 h-4" />
                 Nuevo
               </Button>
             </div>
@@ -450,8 +451,8 @@ export default function AdminDashboard() {
                       {getCategoriaById(equipo.categoriaId)?.nombre || "Sin categoría"} • {getGrupoById(equipo.grupoId)?.nombre || "Sin grupo"}
                     </p>
                     <div className="flex items-center gap-1 mt-2">
-                      <Button variant="ghost" size="sm"><Pencil className="w-3 h-3" /></Button>
-                      <Button variant="ghost" size="sm" className="text-error"><Trash2 className="w-3 h-3" /></Button>
+                      <Button variant="ghost" size="sm"><HugeiconsIcon icon={Edit02Icon} className="w-3 h-3" /></Button>
+                      <Button variant="ghost" size="sm" className="text-error"><HugeiconsIcon icon={Delete02Icon} className="w-3 h-3" /></Button>
                     </div>
                   </CardContent>
                 </Card>
@@ -519,7 +520,7 @@ export default function AdminDashboard() {
                 <div className="flex gap-3 pt-2">
                   <Button variant="secondary" className="flex-1" onClick={() => setShowModal(false)} type="button" disabled={isSubmitting}>Cancelar</Button>
                   <Button type="submit" className="flex-1" disabled={isSubmitting}>
-                    {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "Guardar"}
+                    {isSubmitting ? <HugeiconsIcon icon={LoaderPinwheelIcon} className="w-4 h-4 animate-spin" /> : "Guardar"}
                   </Button>
                 </div>
               </form>
@@ -530,7 +531,7 @@ export default function AdminDashboard() {
 
       <div className="p-4 fixed bottom-0 left-0 right-0 bg-bg-secondary border-t border-border">
         <Button variant="secondary" className="w-full" onClick={handleLogout}>
-          <LogOut className="w-4 h-4" />
+          <HugeiconsIcon icon={Logout01Icon} className="w-4 h-4" />
           Cerrar Sesión
         </Button>
       </div>

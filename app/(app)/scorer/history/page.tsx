@@ -6,7 +6,8 @@ import { api } from "../../../../convex/_generated/api";
 import { Header } from "@/components/ui/header";
 import { Card, CardContent } from "@/components/ui/card";
 import { MatchCard } from "@/components/ui/match-card";
-import { History } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { TransactionHistoryIcon } from "@hugeicons/core-free-icons";
 
 export default function ScorerHistoryPage() {
   const [userEmail, setUserEmail] = useState<string | null>(null);
@@ -54,7 +55,7 @@ export default function ScorerHistoryPage() {
         ) : (
           <Card>
             <CardContent className="p-8 text-center">
-              <History className="w-8 h-8 mx-auto mb-2 text-text-muted" />
+              <HugeiconsIcon icon={TransactionHistoryIcon} className="w-8 h-8 mx-auto mb-2 text-text-muted" />
               <p className="text-sm text-text-muted">No hay partidos completados</p>
             </CardContent>
           </Card>

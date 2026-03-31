@@ -9,7 +9,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Avatar } from "@/components/ui/avatar";
-import { Plus, Edit2, Trash2, Users, X, Shirt } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  Add01Icon,
+  CancelCircleIcon,
+  Delete02Icon,
+  Edit02Icon,
+  Shirt01Icon,
+  UserGroupIcon,
+} from "@hugeicons/core-free-icons";
 
 export default function TeamsPage() {
   const [showForm, setShowForm] = useState(false);
@@ -69,7 +77,7 @@ export default function TeamsPage() {
 
         {/* Add Team Button */}
         <Button onClick={() => setShowForm(true)} className="w-full" size="lg">
-          <Plus className="w-5 h-5" />
+          <HugeiconsIcon icon={Add01Icon} className="w-5 h-5" />
           Nuevo Equipo
         </Button>
 
@@ -79,7 +87,7 @@ export default function TeamsPage() {
             <CardHeader className="flex flex-row items-center justify-between">
               <h3 className="font-semibold text-text-primary">Nuevo Equipo</h3>
               <Button variant="ghost" size="sm" onClick={() => setShowForm(false)}>
-                <X className="w-4 h-4" />
+                <HugeiconsIcon icon={CancelCircleIcon} className="w-4 h-4" />
               </Button>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -138,10 +146,10 @@ export default function TeamsPage() {
                         setEditingTeamId((prev) => (prev === team._id ? null : team._id))
                       }
                     >
-                      <Edit2 className="w-4 h-4" />
+                      <HugeiconsIcon icon={Edit02Icon} className="w-4 h-4" />
                     </Button>
                     <Button variant="ghost" size="sm" className="text-error hover:text-error hover:bg-error/10">
-                      <Trash2 className="w-4 h-4" />
+                      <HugeiconsIcon icon={Delete02Icon} className="w-4 h-4" />
                     </Button>
                   </div>
                 </div>
@@ -149,7 +157,7 @@ export default function TeamsPage() {
                 {editingTeamId === team._id && (
                 <div className="mt-3 pt-3 border-t border-border">
                   <div className="flex items-center gap-2">
-                    <Shirt className="w-4 h-4 text-text-muted" />
+                    <HugeiconsIcon icon={Shirt01Icon} className="w-4 h-4 text-text-muted" />
                     <span className="text-xs text-text-muted">
                       Plantilla conectada a Convex
                     </span>
@@ -189,14 +197,14 @@ export default function TeamsPage() {
           <Card>
             <CardContent className="p-8 text-center">
               <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-bg-tertiary flex items-center justify-center">
-                <Users className="w-8 h-8 text-text-muted" />
+                <HugeiconsIcon icon={UserGroupIcon} className="w-8 h-8 text-text-muted" />
               </div>
               <h3 className="font-semibold text-text-primary mb-1">No hay equipos</h3>
               <p className="text-sm text-text-muted mb-4">
                 Crea el primer equipo para esta categoría
               </p>
               <Button onClick={() => setShowForm(true)}>
-                <Plus className="w-4 h-4" />
+                <HugeiconsIcon icon={Add01Icon} className="w-4 h-4" />
                 Crear Equipo
               </Button>
             </CardContent>

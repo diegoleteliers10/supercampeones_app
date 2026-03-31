@@ -6,7 +6,8 @@ import { api } from "../../../convex/_generated/api";
 import { Header } from "@/components/ui/header";
 import { Card, CardContent } from "@/components/ui/card";
 import { MatchCard } from "@/components/ui/match-card";
-import { ClipboardList, Clock } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ClipboardIcon, Clock01Icon } from "@hugeicons/core-free-icons";
 import Link from "next/link";
 
 export default function ScorerPage() {
@@ -65,7 +66,7 @@ export default function ScorerPage() {
           ) : (
             <Card>
               <CardContent className="p-6 text-center">
-                <Clock className="w-8 h-8 mx-auto mb-2 text-text-muted" />
+                <HugeiconsIcon icon={Clock01Icon} className="w-8 h-8 mx-auto mb-2 text-text-muted" />
                 <p className="text-sm text-text-muted">No hay partidos en vivo</p>
               </CardContent>
             </Card>
@@ -99,7 +100,7 @@ export default function ScorerPage() {
           ) : (
             <Card>
               <CardContent className="p-6 text-center">
-                <ClipboardList className="w-8 h-8 mx-auto mb-2 text-text-muted" />
+                <HugeiconsIcon icon={ClipboardIcon} className="w-8 h-8 mx-auto mb-2 text-text-muted" />
                 <p className="text-sm text-text-muted">No hay partidos próximos asignados</p>
               </CardContent>
             </Card>

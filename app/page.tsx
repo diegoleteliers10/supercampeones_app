@@ -7,7 +7,12 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Calendar, Trophy, Users } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  Calendar01Icon,
+  CrownIcon,
+  UserGroupIcon,
+} from "@hugeicons/core-free-icons";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -23,10 +28,18 @@ function MobileTabs({
     {
       id: "partidos",
       label: "Partidos",
-      icon: <Calendar className="w-5 h-5" />,
+      icon: <HugeiconsIcon icon={Calendar01Icon} className="w-5 h-5" />,
     },
-    { id: "tabla", label: "Tabla", icon: <Trophy className="w-5 h-5" /> },
-    { id: "equipos", label: "Equipos", icon: <Users className="w-5 h-5" /> },
+    {
+      id: "tabla",
+      label: "Tabla",
+      icon: <HugeiconsIcon icon={CrownIcon} className="w-5 h-5" />,
+    },
+    {
+      id: "equipos",
+      label: "Equipos",
+      icon: <HugeiconsIcon icon={UserGroupIcon} className="w-5 h-5" />,
+    },
   ];
 
   return (

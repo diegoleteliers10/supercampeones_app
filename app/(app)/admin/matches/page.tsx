@@ -10,7 +10,8 @@ import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { MatchCard } from "@/components/ui/match-card";
-import { Plus, Calendar, X } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Add01Icon, Calendar01Icon, CancelCircleIcon } from "@hugeicons/core-free-icons";
 
 export default function MatchesPage() {
   const [showForm, setShowForm] = useState(false);
@@ -54,7 +55,7 @@ export default function MatchesPage() {
           <CardContent className="p-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-accent-light flex items-center justify-center">
-                <Calendar className="w-5 h-5 text-accent" />
+                <HugeiconsIcon icon={Calendar01Icon} className="w-5 h-5 text-accent" />
               </div>
               <div>
                 <p className="font-semibold text-text-primary">Partidos Registrados</p>
@@ -70,7 +71,7 @@ export default function MatchesPage() {
         </Card>
 
         <Button onClick={() => setShowForm(true)} size="lg">
-          <Plus className="w-5 h-5" />
+          <HugeiconsIcon icon={Add01Icon} className="w-5 h-5" />
         </Button>
 
         {/* Add Match Form */}
@@ -79,7 +80,7 @@ export default function MatchesPage() {
             <CardHeader className="flex flex-row items-center justify-between">
               <h3 className="font-semibold text-text-primary">Nuevo Partido</h3>
               <Button variant="ghost" size="sm" onClick={() => setShowForm(false)}>
-                <X className="w-4 h-4" />
+                <HugeiconsIcon icon={CancelCircleIcon} className="w-4 h-4" />
               </Button>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -153,14 +154,14 @@ export default function MatchesPage() {
           <Card>
             <CardContent className="p-8 text-center">
               <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-bg-tertiary flex items-center justify-center">
-                <Calendar className="w-8 h-8 text-text-muted" />
+                <HugeiconsIcon icon={Calendar01Icon} className="w-8 h-8 text-text-muted" />
               </div>
               <h3 className="font-semibold text-text-primary mb-1">Sin partidos</h3>
               <p className="text-sm text-text-muted mb-4">
                 Esta fecha aún no tiene partidos programados
               </p>
               <Button onClick={() => setShowForm(true)}>
-                <Plus className="w-4 h-4" />
+                <HugeiconsIcon icon={Add01Icon} className="w-4 h-4" />
                 Agregar Partido
               </Button>
             </CardContent>

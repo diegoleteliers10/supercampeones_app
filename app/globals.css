@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap");
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
@@ -7,22 +7,22 @@
 @tailwind utilities;
 
 :root {
-  --bg-primary: #FFFFFF;
-  --bg-secondary: #F8FAFC;
-  --bg-tertiary: #F1F5F9;
-  --text-primary: #0F172A;
-  --text-secondary: #64748B;
-  --text-muted: #94A3B8;
-  --border: #E2E8F0;
-  --border-strong: #CBD5E1;
-  --accent: #2563EB;
-  --accent-hover: #1D4ED8;
-  --accent-light: #DBEAFE;
-  --accent-subtle: #EFF6FF;
-  --success: #10B981;
-  --warning: #F59E0B;
-  --error: #EF4444;
-  --fairplay: #8B5CF6;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-tertiary: #f1f5f9;
+  --text-primary: #0f172a;
+  --text-secondary: #64748b;
+  --text-muted: #94a3b8;
+  --border: #e2e8f0;
+  --border-strong: #cbd5e1;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --accent-light: #dbeafe;
+  --accent-subtle: #eff6ff;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
+  --fairplay: #8b5cf6;
 }
 
 * {
@@ -37,7 +37,7 @@ html {
 }
 
 body {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: "Inter", system-ui, sans-serif;
   background-color: var(--bg-primary);
   color: var(--text-primary);
   min-height: 100dvh;
@@ -97,7 +97,9 @@ body {
 
 /* Card hover effect */
 .card-hover {
-  transition: transform 200ms ease-out, box-shadow 200ms ease-out;
+  transition:
+    transform 200ms ease-out,
+    box-shadow 200ms ease-out;
 }
 
 .card-hover:hover {
@@ -112,7 +114,7 @@ body {
 
 /* Number/Mono text */
 .font-mono {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: "JetBrains Mono", monospace;
 }
 
 /* Status badges */
@@ -232,7 +234,7 @@ body {
     --sidebar-ring: oklch(0.556 0 0);
   }
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border outline-2 outline-offset-2;
   }
   body {
     @apply bg-background text-foreground;

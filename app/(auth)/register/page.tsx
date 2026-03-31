@@ -7,7 +7,14 @@ import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
-import { LogIn, Shield, Clipboard, Eye, EyeOff } from "lucide-react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  ClipboardIcon,
+  EyeIcon,
+  Login01Icon,
+  Shield01Icon,
+  ViewOffIcon,
+} from "@hugeicons/core-free-icons";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -131,7 +138,7 @@ export default function RegisterPage() {
                 aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
                 className="absolute right-3 top-[2.6rem] text-text-muted hover:text-text-secondary"
               >
-                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                {showPassword ? <HugeiconsIcon icon={ViewOffIcon} className="w-5 h-5" /> : <HugeiconsIcon icon={EyeIcon} className="w-5 h-5" />}
               </button>
             </div>
 
@@ -150,7 +157,7 @@ export default function RegisterPage() {
                 aria-label={showConfirmPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
                 className="absolute right-3 top-[2.6rem] text-text-muted hover:text-text-secondary"
               >
-                {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                {showConfirmPassword ? <HugeiconsIcon icon={ViewOffIcon} className="w-5 h-5" /> : <HugeiconsIcon icon={EyeIcon} className="w-5 h-5" />}
               </button>
             </div>
             <Select
@@ -164,7 +171,7 @@ export default function RegisterPage() {
             <div className="p-3 bg-bg-tertiary rounded-lg">
               {role === "admin" && (
                 <div className="flex items-start gap-3">
-                  <Shield className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
+                  <HugeiconsIcon icon={Shield01Icon} className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
                   <div>
                     <p className="text-sm font-medium text-text-primary">Rol: Administrador</p>
                     <p className="text-xs text-text-muted">
@@ -175,7 +182,7 @@ export default function RegisterPage() {
               )}
               {role === "scorer" && (
                 <div className="flex items-start gap-3">
-                  <Clipboard className="w-5 h-5 text-success flex-shrink-0 mt-0.5" />
+                  <HugeiconsIcon icon={ClipboardIcon} className="w-5 h-5 text-success flex-shrink-0 mt-0.5" />
                   <div>
                     <p className="text-sm font-medium text-text-primary">Rol: Planillero</p>
                     <p className="text-xs text-text-muted">
@@ -188,7 +195,7 @@ export default function RegisterPage() {
           </CardContent>
           <CardFooter className="flex flex-col gap-3">
             <Button type="submit" className="w-full" size="lg" loading={loading}>
-              <LogIn className="w-5 h-5" />
+              <HugeiconsIcon icon={Login01Icon} className="w-5 h-5" />
               Crear Cuenta
             </Button>
             <p className="text-sm text-text-muted text-center">

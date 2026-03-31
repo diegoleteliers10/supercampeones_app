@@ -1,9 +1,19 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
-import { Avatar } from "./avatar";
-import { LogOut, Menu } from "lucide-react";
+import { Avatar, AvatarImage, AvatarFallback } from "./avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./dropdown-menu";
+import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  ArrowLeft01Icon,
+  Logout01Icon,
+  Menu01Icon,
+} from "@hugeicons/core-free-icons";
 
 interface HeaderProps {
   title: string;
@@ -20,6 +30,15 @@ interface HeaderProps {
   className?: string;
 }
 
+function getInitials(name: string) {
+  return name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
+}
+
 export function Header({
   title,
   subtitle,
@@ -30,107 +49,84 @@ export function Header({
   showBackButton,
   className,
 }: HeaderProps) {
-  const [open, setOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    if (!open) return;
-    const onPointerDown = (e: PointerEvent) => {
-      const target = e.target as Node | null;
-      if (!target) return;
-      if (menuRef.current && !menuRef.current.contains(target)) {
-        setOpen(false);
-      }
-    };
-    window.addEventListener("pointerdown", onPointerDown);
-    return () => window.removeEventListener("pointerdown", onPointerDown);
-  }, [open]);
-
   return (
-    <header className={cn(
-      "sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-border",
-      "h-14 px-4 flex items-center justify-between",
-      className
-    )}>
+    <header
+      className={cn(
+        "sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border",
+        "h-14 px-4 flex items-center justify-between",
+        className,
+      )}
+    >
       {/* Left: Menu button or back */}
       <div className="w-10">
         {showBackButton ? (
           <button
+            type="button"
             onClick={onBackClick}
-            className="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-bg-secondary transition-colors"
+            className="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-muted transition-colors"
+            aria-label="Volver"
           >
-            <svg className="w-5 h-5 text-text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
+            <HugeiconsIcon
+              icon={ArrowLeft01Icon}
+              className="w-5 h-5"
+              aria-hidden="true"
+            />
           </button>
-        ) : onMenuClick && (
+        ) : onMenuClick ? (
           <button
+            type="button"
             onClick={onMenuClick}
-            className="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-bg-secondary transition-colors"
+            className="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-muted transition-colors"
+            aria-label="Menú"
           >
-            <Menu className="w-5 h-5 text-text-primary" />
+            <HugeiconsIcon icon={Menu01Icon} className="w-5 h-5" />
           </button>
-        )}
+        ) : null}
       </div>
 
       {/* Center: Title */}
       <div className="flex-1 text-center">
-        <h1 className="text-base font-bold text-text-primary leading-tight">
-          {title}
-        </h1>
+        <h1 className="text-base font-bold leading-tight">{title}</h1>
         {subtitle && (
-          <p className="text-xs text-text-muted">{subtitle}</p>
+          <p className="text-xs text-muted-foreground">{subtitle}</p>
         )}
       </div>
 
       {/* Right: User avatar */}
       <div className="w-10 flex justify-end">
         {user ? (
-          <div className="relative" ref={menuRef}>
-            <button
-              type="button"
-              onClick={() => {
-                if (!onLogout) return;
-                setOpen((v) => !v);
-              }}
-              className={cn(
-                "rounded-full",
-                onLogout ? "cursor-pointer" : "cursor-default"
-              )}
-              aria-haspopup={onLogout ? "menu" : undefined}
-              aria-expanded={onLogout ? open : undefined}
-              aria-label={onLogout ? "Abrir menú de cuenta" : "Cuenta"}
-            >
-              <Avatar name={user.name} src={user.avatarUrl} size="sm" />
-            </button>
-
-            {onLogout && open && (
-              <div
-                role="menu"
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                type="button"
                 className={cn(
-                  "absolute right-0 mt-2 w-48 rounded-xl border border-border bg-white shadow-lg",
-                  "overflow-hidden"
+                  "rounded-full focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+                  onLogout ? "cursor-pointer" : "cursor-default",
                 )}
+                aria-label={onLogout ? "Abrir menú de cuenta" : "Cuenta"}
               >
-                <button
-                  type="button"
-                  role="menuitem"
+                <Avatar data-size="sm">
+                  {user.avatarUrl && (
+                    <AvatarImage src={user.avatarUrl} alt={user.name} />
+                  )}
+                  <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
+                </Avatar>
+              </button>
+            </DropdownMenuTrigger>
+            {onLogout && (
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuItem
                   onClick={async () => {
-                    setOpen(false);
                     await onLogout();
                   }}
-                  className={cn(
-                    "w-full px-3 py-2 text-left text-sm",
-                    "hover:bg-bg-secondary transition-colors",
-                    "flex items-center gap-2 text-error"
-                  )}
+                  className="text-destructive focus:text-destructive"
                 >
-                  <LogOut className="w-4 h-4" />
+                  <HugeiconsIcon icon={Logout01Icon} className="w-4 h-4 mr-2" />
                   Cerrar sesión
-                </button>
-              </div>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
             )}
-          </div>
+          </DropdownMenu>
         ) : (
           <div className="w-8 h-8" />
         )}
