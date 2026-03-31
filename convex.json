@@ -1,0 +1,8 @@
+{
+  "node": "18",
+  "liveReload": true,
+  "functions": "convex/",
+  "experimental": {
+    "subdomains": false
+  }
+}
