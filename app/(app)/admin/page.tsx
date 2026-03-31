@@ -133,10 +133,15 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("userRole");
-    localStorage.removeItem("userName");
-    window.location.href = "/login";
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+    } finally {
+      localStorage.removeItem("userRole");
+      localStorage.removeItem("userName");
+      localStorage.removeItem("userEmail");
+      window.location.href = "/login";
+    }
   };
 
   const getEquipoById = (id: any) => equipos.find((e: any) => e._id === id);
@@ -157,6 +162,7 @@ export default function AdminDashboard() {
         title="Admin"
         subtitle="Panel de Administración"
         user={{ name: "Admin" }}
+        onLogout={handleLogout}
       />
 
       <div className="p-4 space-y-4">

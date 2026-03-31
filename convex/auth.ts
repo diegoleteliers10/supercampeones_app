@@ -1,3 +1,5 @@
 import { convexAuth } from "@convex-dev/auth/server";
 
-export const { authTable, auth, getSessionId, currentUser, storage } = convexAuth;
+export const { auth, signIn, signOut, store, isAuthenticated } = convexAuth({
+  providers: [],
+});

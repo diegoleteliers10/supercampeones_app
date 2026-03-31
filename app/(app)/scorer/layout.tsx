@@ -8,7 +8,7 @@ export default async function ScorerLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const token = cookies().get("lk_session")?.value;
+  const token = (await cookies()).get("lk_session")?.value;
   const session = verifySessionToken(token);
   if (!session || (session.rol !== "planillero" && session.rol !== "admin")) {
     redirect("/login");

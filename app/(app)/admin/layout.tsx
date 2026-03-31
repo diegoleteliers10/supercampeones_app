@@ -8,7 +8,7 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const token = cookies().get("lk_session")?.value;
+  const token = (await cookies()).get("lk_session")?.value;
   const session = verifySessionToken(token);
   if (!session || session.rol !== "admin") {
     redirect("/login");

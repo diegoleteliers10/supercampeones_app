@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 import { Card, CardContent } from "@/components/ui/card";
@@ -20,7 +20,11 @@ function MobileTabs({
   onTabChange: (tab: string) => void;
 }) {
   const tabs = [
-    { id: "partidos", label: "Partidos", icon: <Calendar className="w-5 h-5" /> },
+    {
+      id: "partidos",
+      label: "Partidos",
+      icon: <Calendar className="w-5 h-5" />,
+    },
     { id: "tabla", label: "Tabla", icon: <Trophy className="w-5 h-5" /> },
     { id: "equipos", label: "Equipos", icon: <Users className="w-5 h-5" /> },
   ];
@@ -40,7 +44,9 @@ function MobileTabs({
             }`}
           >
             {tab.icon}
-            <span className={`text-xs font-medium ${activeTab === tab.id ? "font-semibold" : ""}`}>
+            <span
+              className={`text-xs font-medium ${activeTab === tab.id ? "font-semibold" : ""}`}
+            >
               {tab.label}
             </span>
             {activeTab === tab.id && (
@@ -53,7 +59,8 @@ function MobileTabs({
   );
 }
 
-export default function ParentHomePage() {
+// Inner component that uses useSearchParams - wrapped in Suspense
+function ParentHomePageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const tabParam = searchParams.get("tab");
@@ -78,7 +85,8 @@ export default function ParentHomePage() {
   const equipos = useQuery(api.api.listEquipos, {}) || [];
 
   const getEquipoById = (id: any) => equipos.find((e: any) => e._id === id);
-  const getCategoriaById = (id: any) => categorias.find((c: any) => c._id === id);
+  const getCategoriaById = (id: any) =>
+    categorias.find((c: any) => c._id === id);
 
   // Generate tabla from equipos data
   const tabla = equipos.map((e: any, index: number) => ({
@@ -100,7 +108,9 @@ export default function ParentHomePage() {
       <div className="px-4 pt-4">
         <div className="flex items-start justify-between gap-3 mb-3">
           <div className="min-w-0">
-            <p className="text-xs font-semibold uppercase tracking-wide text-accent">Bienvenidos</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-accent">
+              Bienvenidos
+            </p>
             <h2 className="text-xl font-bold text-text-primary leading-tight">
               Hola, familias
             </h2>
@@ -108,13 +118,13 @@ export default function ParentHomePage() {
               Sigue partidos, tabla y equipos en tiempo real.
             </p>
           </div>
-
         </div>
 
         <Card className="bg-gradient-to-r from-accent/[0.08] to-white border-accent/20">
           <CardContent className="p-3.5">
             <p className="text-sm font-medium text-text-primary">
-              Revisa el calendario de tus hijos y no te pierdas ningún resultado.
+              Revisa el calendario de tus hijos y no te pierdas ningún
+              resultado.
             </p>
           </CardContent>
         </Card>
@@ -137,7 +147,9 @@ export default function ParentHomePage() {
               {categorias.map((cat: any) => (
                 <Badge
                   key={cat._id}
-                  variant={selectedCategory === cat._id ? "completed" : "upcoming"}
+                  variant={
+                    selectedCategory === cat._id ? "completed" : "upcoming"
+                  }
                   selected={selectedCategory === cat._id}
                   onClick={() => setSelectedCategory(cat._id)}
                 >
@@ -153,7 +165,10 @@ export default function ParentHomePage() {
               </h2>
               <div className="space-y-3">
                 {partidos
-                  .filter((p: any) => !selectedCategory || p.categoriaId === selectedCategory)
+                  .filter(
+                    (p: any) =>
+                      !selectedCategory || p.categoriaId === selectedCategory,
+                  )
                   .map((partido: any) => {
                     const local = getEquipoById(partido.equipoLocalId);
                     const visitante = getEquipoById(partido.equipoVisitanteId);
@@ -167,7 +182,10 @@ export default function ParentHomePage() {
                             </Badge>
                             <span className="text-xs text-text-muted">
                               {new Date(partido.fecha).toLocaleDateString()} •{" "}
-                              {new Date(partido.fecha).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                              {new Date(partido.fecha).toLocaleTimeString([], {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })}
                             </span>
                           </div>
 
@@ -179,11 +197,15 @@ export default function ParentHomePage() {
                                 className="mx-auto mb-2 text-white"
                                 style={{ backgroundColor: "#888" }}
                               />
-                              <p className="font-semibold text-text-primary text-sm">{local?.nombre || "?"}</p>
+                              <p className="font-semibold text-text-primary text-sm">
+                                {local?.nombre || "?"}
+                              </p>
                             </div>
 
                             <div className="px-4">
-                              <span className="text-2xl text-text-muted font-light">vs</span>
+                              <span className="text-2xl text-text-muted font-light">
+                                vs
+                              </span>
                             </div>
 
                             <div className="flex-1 text-center">
@@ -200,14 +222,18 @@ export default function ParentHomePage() {
                           </div>
 
                           <div className="flex items-center justify-center mt-2 pt-2 border-t border-border">
-                            <span className="text-xs text-text-muted">{partido.ubicacion}</span>
+                            <span className="text-xs text-text-muted">
+                              {partido.ubicacion}
+                            </span>
                           </div>
                         </CardContent>
                       </Card>
                     );
                   })}
                 {partidos.length === 0 && (
-                  <p className="text-center text-text-muted py-4">No hay partidos programados</p>
+                  <p className="text-center text-text-muted py-4">
+                    No hay partidos programados
+                  </p>
                 )}
               </div>
             </div>
@@ -229,7 +255,9 @@ export default function ParentHomePage() {
               {categorias.map((cat: any) => (
                 <Badge
                   key={cat._id}
-                  variant={selectedCategory === cat._id ? "completed" : "upcoming"}
+                  variant={
+                    selectedCategory === cat._id ? "completed" : "upcoming"
+                  }
                   selected={selectedCategory === cat._id}
                   onClick={() => setSelectedCategory(cat._id)}
                 >
@@ -249,46 +277,85 @@ export default function ParentHomePage() {
                     <table className="w-full text-sm">
                       <thead className="bg-bg-tertiary">
                         <tr>
-                          <th className="text-left p-3 font-semibold text-text-muted">#</th>
-                          <th className="text-left p-3 font-semibold text-text-muted">Equipo</th>
-                          <th className="text-center p-3 font-semibold text-text-muted">PJ</th>
-                          <th className="text-center p-3 font-semibold text-text-muted">G</th>
-                          <th className="text-center p-3 font-semibold text-text-muted">E</th>
-                          <th className="text-center p-3 font-semibold text-text-muted">P</th>
-                          <th className="text-center p-3 font-semibold text-text-muted">DG</th>
-                          <th className="text-center p-3 font-semibold text-text-muted">TE</th>
-                          <th className="text-center p-3 font-semibold text-text-muted">Pts</th>
+                          <th className="text-left p-3 font-semibold text-text-muted">
+                            #
+                          </th>
+                          <th className="text-left p-3 font-semibold text-text-muted">
+                            Equipo
+                          </th>
+                          <th className="text-center p-3 font-semibold text-text-muted">
+                            PJ
+                          </th>
+                          <th className="text-center p-3 font-semibold text-text-muted">
+                            G
+                          </th>
+                          <th className="text-center p-3 font-semibold text-text-muted">
+                            E
+                          </th>
+                          <th className="text-center p-3 font-semibold text-text-muted">
+                            P
+                          </th>
+                          <th className="text-center p-3 font-semibold text-text-muted">
+                            DG
+                          </th>
+                          <th className="text-center p-3 font-semibold text-text-muted">
+                            TE
+                          </th>
+                          <th className="text-center p-3 font-semibold text-text-muted">
+                            Pts
+                          </th>
                         </tr>
                       </thead>
                       <tbody>
                         {tabla.map((team: any) => (
-                          <tr key={team._id} className="border-t border-border hover:bg-bg-tertiary/50">
-                            <td className="p-3 font-mono font-bold text-text-primary">{team.posicion}</td>
+                          <tr
+                            key={team._id}
+                            className="border-t border-border hover:bg-bg-tertiary/50"
+                          >
+                            <td className="p-3 font-mono font-bold text-text-primary">
+                              {team.posicion}
+                            </td>
                             <td className="p-3">
                               <div className="flex items-center gap-2">
                                 <div
                                   className="w-3 h-3 rounded-full"
                                   style={{ backgroundColor: "#F59E0B" }}
                                 />
-                                <span className="font-medium text-text-primary">{team.nombre}</span>
+                                <span className="font-medium text-text-primary">
+                                  {team.nombre}
+                                </span>
                               </div>
                             </td>
-                            <td className="p-3 text-center font-mono text-text-secondary">{team.jugados}</td>
-                            <td className="p-3 text-center font-mono text-success">{team.ganados}</td>
-                            <td className="p-3 text-center font-mono text-warning">{team.empatados}</td>
-                            <td className="p-3 text-center font-mono text-error">{team.perdidos}</td>
+                            <td className="p-3 text-center font-mono text-text-secondary">
+                              {team.jugados}
+                            </td>
+                            <td className="p-3 text-center font-mono text-success">
+                              {team.ganados}
+                            </td>
+                            <td className="p-3 text-center font-mono text-warning">
+                              {team.empatados}
+                            </td>
+                            <td className="p-3 text-center font-mono text-error">
+                              {team.perdidos}
+                            </td>
                             <td className="p-3 text-center font-mono text-text-secondary">
                               {(team.golesFavor ?? 0) - (team.golesContra ?? 0)}
                             </td>
-                            <td className="p-3 text-center font-mono text-text-secondary">{team.fairPlayPoints ?? 0}</td>
-                            <td className="p-3 text-center font-mono font-bold text-accent">{team.puntos}</td>
+                            <td className="p-3 text-center font-mono text-text-secondary">
+                              {team.fairPlayPoints ?? 0}
+                            </td>
+                            <td className="p-3 text-center font-mono font-bold text-accent">
+                              {team.puntos}
+                            </td>
                           </tr>
                         ))}
                       </tbody>
                     </table>
                   </div>
                   {tabla.length === 0 && (
-                    <p className="text-center text-text-muted py-4">No hay datos de posiciones</p>
+                    <p className="text-center text-text-muted py-4">
+                      No hay datos de posiciones
+                    </p>
                   )}
                 </CardContent>
               </Card>
@@ -311,7 +378,9 @@ export default function ParentHomePage() {
               {categorias.map((cat: any) => (
                 <Badge
                   key={cat._id}
-                  variant={selectedCategory === cat._id ? "completed" : "upcoming"}
+                  variant={
+                    selectedCategory === cat._id ? "completed" : "upcoming"
+                  }
                   selected={selectedCategory === cat._id}
                   onClick={() => setSelectedCategory(cat._id)}
                 >
@@ -327,7 +396,10 @@ export default function ParentHomePage() {
               </h2>
               <div className="grid grid-cols-2 gap-3">
                 {equipos
-                  .filter((e: any) => !selectedCategory || e.categoriaId === selectedCategory)
+                  .filter(
+                    (e: any) =>
+                      !selectedCategory || e.categoriaId === selectedCategory,
+                  )
                   .map((equipo: any) => (
                     <Card key={equipo._id} hover>
                       <CardContent className="p-4 flex flex-col items-center gap-2">
@@ -337,15 +409,20 @@ export default function ParentHomePage() {
                           className="text-white"
                           style={{ backgroundColor: "#F59E0B" }}
                         />
-                        <p className="font-semibold text-text-primary text-center">{equipo.nombre}</p>
+                        <p className="font-semibold text-text-primary text-center">
+                          {equipo.nombre}
+                        </p>
                         <Badge variant="upcoming" className="text-xs">
-                          {getCategoriaById(equipo.categoriaId)?.nombre || "Sin categoría"}
+                          {getCategoriaById(equipo.categoriaId)?.nombre ||
+                            "Sin categoría"}
                         </Badge>
                       </CardContent>
                     </Card>
                   ))}
                 {equipos.length === 0 && (
-                  <p className="col-span-2 text-center text-text-muted py-4">No hay equipos registrados</p>
+                  <p className="col-span-2 text-center text-text-muted py-4">
+                    No hay equipos registrados
+                  </p>
                 )}
               </div>
             </div>
@@ -356,5 +433,23 @@ export default function ParentHomePage() {
       {/* Bottom Tab Navigation */}
       <MobileTabs activeTab={activeTab} onTabChange={setActiveTab} />
     </div>
+  );
+}
+
+// Loading fallback for Suspense
+function LoadingContent() {
+  return (
+    <div className="min-h-screen bg-bg-secondary pb-20 flex items-center justify-center">
+      <p className="text-text-muted">Cargando...</p>
+    </div>
+  );
+}
+
+// Main page component with Suspense boundary
+export default function ParentHomePage() {
+  return (
+    <Suspense fallback={<LoadingContent />}>
+      <ParentHomePageContent />
+    </Suspense>
   );
 }

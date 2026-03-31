@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, use } from "react";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../../../convex/_generated/api";
 import { Header } from "@/components/ui/header";
@@ -11,7 +11,8 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar } from "@/components/ui/avatar";
 import { Plus, Play, Square, Flag } from "lucide-react";
 
-export default function MatchDetailPage({ params }: { params: { id: string } }) {
+export default function MatchDetailPage(props: { params: Promise<{ id: string }> }) {
+  const params = use(props.params);
   const match = useQuery(api.api.getPartido, { partidoId: params.id as any });
   const equipos = useQuery(api.api.listEquipos, {}) || [];
   const events = useQuery(api.api.listEventosPartido, { partidoId: params.id as any }) || [];
