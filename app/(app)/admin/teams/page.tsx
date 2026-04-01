@@ -44,18 +44,30 @@ export default function TeamsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-bg-secondary">
+    <div className="min-h-screen bg-white">
       <Header title="Equipos" subtitle={`${equipos.length} equipos`} />
 
       <div className="p-4 space-y-4">
+        <Card className="border-primary/20 bg-gradient-to-br from-primary/[0.10] via-primary/[0.06] to-white shadow-sm">
+          <CardContent className="p-4">
+            <p className="text-xs font-semibold uppercase tracking-wide text-primary/80">
+              Gestión de planteles
+            </p>
+            <h2 className="text-xl font-bold text-slate-900 mt-1">Equipos</h2>
+            <p className="text-sm text-slate-600 mt-1">
+              Crea equipos y organízalos por categoría y grupo.
+            </p>
+          </CardContent>
+        </Card>
+
         {/* Category Filter */}
-        <div className="flex gap-2 overflow-x-auto pb-2">
+        <div className="flex gap-2 overflow-x-auto pb-2 px-1">
           <button
             onClick={() => setSelectedCategory(null)}
             className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
               !selectedCategory
-                ? "bg-accent text-white"
-                : "bg-white text-text-secondary border border-border hover:bg-bg-secondary"
+                ? "bg-primary text-primary-foreground"
+                : "bg-white text-slate-700 border border-primary/20 hover:bg-primary/5"
             }`}
           >
             Todas
@@ -66,8 +78,8 @@ export default function TeamsPage() {
               onClick={() => setSelectedCategory(cat._id)}
               className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-colors ${
                 selectedCategory === cat._id
-                  ? "bg-accent text-white"
-                  : "bg-white text-text-secondary border border-border hover:bg-bg-secondary"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-white text-slate-700 border border-primary/20 hover:bg-primary/5"
               }`}
             >
               {cat.nombre}
@@ -76,17 +88,17 @@ export default function TeamsPage() {
         </div>
 
         {/* Add Team Button */}
-        <Button onClick={() => setShowForm(true)} className="w-full" size="lg">
+        <Button onClick={() => setShowForm(true)} className="w-full bg-primary text-primary-foreground hover:bg-primary/90" size="lg">
           <HugeiconsIcon icon={Add01Icon} className="w-5 h-5" />
           Nuevo Equipo
         </Button>
 
         {/* New Team Form */}
         {showForm && (
-          <Card>
+          <Card className="border-primary/20 bg-white shadow-sm">
             <CardHeader className="flex flex-row items-center justify-between">
-              <h3 className="font-semibold text-text-primary">Nuevo Equipo</h3>
-              <Button variant="ghost" size="sm" onClick={() => setShowForm(false)}>
+              <h3 className="font-semibold text-slate-900">Nuevo Equipo</h3>
+              <Button variant="ghost" size="sm" className="text-slate-500 hover:text-primary hover:bg-primary/10" onClick={() => setShowForm(false)}>
                 <HugeiconsIcon icon={CancelCircleIcon} className="w-4 h-4" />
               </Button>
             </CardHeader>
@@ -97,21 +109,21 @@ export default function TeamsPage() {
                   label="Liga"
                   options={ligas.map((l: any) => ({ value: l._id, label: l.nombre }))}
                   value={form.ligaId}
-                  onChange={(e) => setForm((prev) => ({ ...prev, ligaId: e.target.value, categoriaId: "" }))}
+                  onChange={(value) => setForm((prev) => ({ ...prev, ligaId: value, categoriaId: "" }))}
                 />
                 <Select 
                   label="Categoría" 
                   options={categorias.filter((c: any) => !form.ligaId || c.ligaId === form.ligaId).map((c: any) => ({ value: c._id, label: c.nombre }))}
                   value={form.categoriaId}
-                  onChange={(e) => setForm((prev) => ({ ...prev, categoriaId: e.target.value }))} 
+                  onChange={(value) => setForm((prev) => ({ ...prev, categoriaId: value }))} 
                 />
               </div>
             </CardContent>
             <CardFooter>
-              <Button variant="secondary" onClick={() => setShowForm(false)} className="flex-1">
+              <Button variant="outline" onClick={() => setShowForm(false)} className="flex-1 border-primary/25 text-primary hover:bg-primary/10">
                 Cancelar
               </Button>
-              <Button className="flex-1" onClick={handleCreate}>
+              <Button className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90" onClick={handleCreate}>
                 Crear
               </Button>
             </CardFooter>
@@ -121,7 +133,7 @@ export default function TeamsPage() {
         {/* Teams List */}
         <div className="space-y-3">
           {equipos.map((team: any) => (
-            <Card key={team._id} hover>
+            <Card key={team._id} hover className="border-primary/15 bg-white shadow-sm">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
                   <Avatar 
@@ -142,6 +154,7 @@ export default function TeamsPage() {
                     <Button
                       variant="ghost"
                       size="sm"
+                      className="text-slate-500 hover:text-primary hover:bg-primary/10"
                       onClick={() =>
                         setEditingTeamId((prev) => (prev === team._id ? null : team._id))
                       }
@@ -157,8 +170,8 @@ export default function TeamsPage() {
                 {editingTeamId === team._id && (
                 <div className="mt-3 pt-3 border-t border-border">
                   <div className="flex items-center gap-2">
-                    <HugeiconsIcon icon={Shirt01Icon} className="w-4 h-4 text-text-muted" />
-                    <span className="text-xs text-text-muted">
+                    <HugeiconsIcon icon={Shirt01Icon} className="w-4 h-4 text-slate-500" />
+                    <span className="text-xs text-slate-500">
                       Plantilla conectada a Convex
                     </span>
                   </div>
@@ -170,12 +183,13 @@ export default function TeamsPage() {
                           .map((g: any) => ({ value: g._id, label: g.nombre }))}
                         placeholder="Asignar grupo"
                         value={assignGrupoByTeam[team._id] || ""}
-                        onChange={(e) => setAssignGrupoByTeam((prev) => ({ ...prev, [team._id]: e.target.value }))}
+                        onChange={(value) => setAssignGrupoByTeam((prev) => ({ ...prev, [team._id]: value }))}
                       />
                     </div>
                     <Button
                       size="sm"
-                      variant="secondary"
+                      variant="outline"
+                      className="border-primary/25 text-primary hover:bg-primary/10"
                       onClick={async () => {
                         const grupoId = assignGrupoByTeam[team._id];
                         if (!grupoId) return;
@@ -194,16 +208,16 @@ export default function TeamsPage() {
 
         {/* Empty State */}
         {equipos.length === 0 && (
-          <Card>
+          <Card className="border-primary/15 bg-white shadow-sm">
             <CardContent className="p-8 text-center">
-              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-bg-tertiary flex items-center justify-center">
-                <HugeiconsIcon icon={UserGroupIcon} className="w-8 h-8 text-text-muted" />
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
+                <HugeiconsIcon icon={UserGroupIcon} className="w-8 h-8 text-primary" />
               </div>
-              <h3 className="font-semibold text-text-primary mb-1">No hay equipos</h3>
-              <p className="text-sm text-text-muted mb-4">
+              <h3 className="font-semibold text-slate-900 mb-1">No hay equipos</h3>
+              <p className="text-sm text-slate-600 mb-4">
                 Crea el primer equipo para esta categoría
               </p>
-              <Button onClick={() => setShowForm(true)}>
+              <Button onClick={() => setShowForm(true)} className="bg-primary text-primary-foreground hover:bg-primary/90">
                 <HugeiconsIcon icon={Add01Icon} className="w-4 h-4" />
                 Crear Equipo
               </Button>

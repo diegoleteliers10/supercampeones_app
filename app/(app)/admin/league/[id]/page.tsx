@@ -27,7 +27,7 @@ export default function LeagueDetailPage() {
   const liga = ligas.find((l: any) => l._id === ligaId);
 
   return (
-    <div className="min-h-screen bg-bg-secondary">
+    <div className="min-h-screen bg-white">
       <Header
         title={liga?.nombre || "Detalle de Liga"}
         subtitle="Categorías, grupos y equipos"
@@ -35,13 +35,29 @@ export default function LeagueDetailPage() {
       />
 
       <div className="p-4 space-y-4">
+        <Card className="border-primary/20 bg-gradient-to-br from-primary/[0.10] via-primary/[0.06] to-white shadow-sm">
+          <CardContent className="p-4">
+            <p className="text-xs font-semibold uppercase tracking-wide text-primary/80">
+              Estructura de liga
+            </p>
+            <h2 className="text-xl font-bold text-slate-900 mt-1">
+              {liga?.nombre || "Detalle de Liga"}
+            </h2>
+            <p className="text-sm text-slate-600 mt-1">
+              Revisa categorías, grupos y equipos organizados.
+            </p>
+          </CardContent>
+        </Card>
+
         {categorias.length === 0 && (
-          <Card>
+          <Card className="border-primary/15 bg-white shadow-sm">
             <CardContent className="p-6 text-center">
-              <HugeiconsIcon icon={FolderTreeIcon} className="w-10 h-10 mx-auto mb-2 text-text-muted" />
-              <p className="text-sm text-text-muted">Esta liga aún no tiene categorías.</p>
+              <div className="w-14 h-14 mx-auto mb-3 rounded-full bg-primary/10 flex items-center justify-center">
+                <HugeiconsIcon icon={FolderTreeIcon} className="w-7 h-7 text-primary" />
+              </div>
+              <p className="text-sm text-slate-600">Esta liga aún no tiene categorías.</p>
               <Link href="/admin">
-                <Button className="mt-3" size="sm">Crear categoría</Button>
+                <Button className="mt-3 bg-primary text-primary-foreground hover:bg-primary/90" size="sm">Crear categoría</Button>
               </Link>
             </CardContent>
           </Card>
@@ -51,43 +67,43 @@ export default function LeagueDetailPage() {
           const gruposCategoria = grupos.filter((g: any) => g.categoriaId === categoria._id);
 
           return (
-            <Card key={categoria._id}>
+            <Card key={categoria._id} className="border-primary/15 bg-white shadow-sm">
               <CardContent className="p-4 space-y-3">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h2 className="font-semibold text-text-primary">{categoria.nombre}</h2>
-                    <p className="text-sm text-text-muted">
+                    <h2 className="font-semibold text-slate-900">{categoria.nombre}</h2>
+                    <p className="text-sm text-slate-600">
                       {gruposCategoria.length} grupos
                     </p>
                   </div>
-                  <Badge variant="upcoming">Categoría</Badge>
+                  <Badge variant="upcoming" className="border-primary/20 bg-primary/10 text-primary">Categoría</Badge>
                 </div>
 
                 <div className="space-y-2">
                   {gruposCategoria.length === 0 && (
-                    <p className="text-sm text-text-muted">Sin grupos en esta categoría.</p>
+                    <p className="text-sm text-slate-500">Sin grupos en esta categoría.</p>
                   )}
 
                   {gruposCategoria.map((grupo: any) => {
                     const equiposGrupo = equipos.filter((e: any) => e.grupoId === grupo._id);
                     return (
-                      <div key={grupo._id} className="border border-border rounded-xl p-3 bg-white">
+                      <div key={grupo._id} className="border border-primary/15 rounded-xl p-3 bg-primary/[0.02]">
                         <div className="flex items-center justify-between mb-2">
-                          <p className="font-medium text-text-primary">{grupo.nombre}</p>
-                          <span className="text-xs text-text-muted">{equiposGrupo.length} equipos</span>
+                          <p className="font-medium text-slate-900">{grupo.nombre}</p>
+                          <span className="text-xs text-slate-500">{equiposGrupo.length} equipos</span>
                         </div>
 
                         <div className="space-y-1">
                           {equiposGrupo.length === 0 && (
-                            <p className="text-xs text-text-muted">Sin equipos asignados.</p>
+                            <p className="text-xs text-slate-500">Sin equipos asignados.</p>
                           )}
                           {equiposGrupo.map((equipo: any) => (
                             <div key={equipo._id} className="flex items-center justify-between py-1">
                               <div className="flex items-center gap-2">
-                                <HugeiconsIcon icon={UserGroupIcon} className="w-4 h-4 text-text-muted" />
-                                <span className="text-sm text-text-primary">{equipo.nombre}</span>
+                                <HugeiconsIcon icon={UserGroupIcon} className="w-4 h-4 text-primary/80" />
+                                <span className="text-sm text-slate-800">{equipo.nombre}</span>
                               </div>
-                              <HugeiconsIcon icon={ArrowRight01Icon} className="w-4 h-4 text-text-muted" />
+                              <HugeiconsIcon icon={ArrowRight01Icon} className="w-4 h-4 text-slate-400" />
                             </div>
                           ))}
                         </div>

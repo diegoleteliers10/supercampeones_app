@@ -1,11 +1,11 @@
-import * as React from "react"
-import { cva, type VariantProps } from "class-variance-authority"
-import { Slot } from "radix-ui"
+import * as React from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+import { Slot } from "radix-ui";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 const badgeVariants = cva(
-  "group/badge inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent px-2 py-0.5 text-[0.625rem] font-medium whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-2.5!",
+  "inline-flex h-5 w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent px-2 py-0.5 text-[0.625rem] font-medium whitespace-nowrap transition-all focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-2.5!",
   {
     variants: {
       variant: {
@@ -19,31 +19,51 @@ const badgeVariants = cva(
         ghost:
           "hover:bg-muted hover:text-muted-foreground dark:hover:bg-muted/50",
         link: "text-primary underline-offset-4 hover:underline",
+        // Status badges with semantic colors
+        upcoming: "bg-secondary text-secondary-foreground border-border/50",
+        live: "bg-success/15 text-success border-success/20 dark:bg-success/20 dark:text-success-foreground",
+        completed: "bg-muted text-muted-foreground border-border/50",
+        blocked:
+          "bg-error/10 text-error border-error/20 dark:bg-error/15 dark:text-error-foreground",
+        // Match result badges
+        win: "bg-success/15 text-success border-success/20 dark:bg-success/20 dark:text-success-foreground",
+        loss: "bg-error/10 text-error border-error/20 dark:bg-error/15 dark:text-error-foreground",
+        draw: "bg-warning/15 text-warning border-warning/20 dark:bg-warning/20 dark:text-warning-foreground",
       },
     },
     defaultVariants: {
       variant: "default",
     },
-  }
-)
+  },
+);
 
 function Badge({
   className,
   variant = "default",
   asChild = false,
+  selected = false,
   ...props
 }: React.ComponentProps<"span"> &
-  VariantProps<typeof badgeVariants> & { asChild?: boolean }) {
-  const Comp = asChild ? Slot.Root : "span"
+  VariantProps<typeof badgeVariants> & {
+    asChild?: boolean;
+    selected?: boolean;
+  }) {
+  const Comp = asChild ? Slot.Root : "span";
 
   return (
     <Comp
       data-slot="badge"
       data-variant={variant}
-      className={cn(badgeVariants({ variant }), className)}
+      data-selected={selected}
+      className={cn(
+        badgeVariants({ variant }),
+        selected &&
+          "border-primary/35 bg-primary/10 text-primary ring-1 ring-primary/30 ring-offset-0",
+        className,
+      )}
       {...props}
     />
-  )
+  );
 }
 
-export { Badge, badgeVariants }
+export { Badge, badgeVariants };

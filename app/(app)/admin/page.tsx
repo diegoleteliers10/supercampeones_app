@@ -158,7 +158,7 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-bg-secondary">
+    <div className="min-h-screen bg-white">
       <Header
         title="Admin"
         subtitle="Panel de Administración"
@@ -166,81 +166,95 @@ export default function AdminDashboard() {
         onLogout={handleLogout}
       />
 
-      <div className="p-4 space-y-4">
+      <div className="p-4 space-y-5 pb-28">
         {activeTab === "dashboard" && (
           <>
+            <Card className="border-primary/20 bg-gradient-to-br from-primary/[0.10] via-primary/[0.06] to-white shadow-sm">
+              <CardContent className="p-4">
+                <p className="text-xs font-semibold uppercase tracking-wide text-primary/80">
+                  Panel de control
+                </p>
+                <h2 className="text-2xl font-bold text-slate-900 mt-1">
+                  Gestión de Liga
+                </h2>
+                <p className="text-sm text-slate-600 mt-1">
+                  Administra categorías, equipos y partidos desde un solo lugar.
+                </p>
+              </CardContent>
+            </Card>
+
             <div className="grid grid-cols-2 gap-3">
-              <Card>
+              <Card className="border-primary/15 bg-white shadow-sm">
                 <CardContent className="p-4 flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-accent-light flex items-center justify-center">
-                    <HugeiconsIcon icon={Settings01Icon} className="w-5 h-5 text-accent" />
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <HugeiconsIcon icon={Settings01Icon} className="w-5 h-5 text-primary" />
                   </div>
                   <div>
-                    <p className="text-2xl font-bold font-mono text-text-primary">{stats.categorias}</p>
-                    <p className="text-xs text-text-muted">Categorías</p>
+                    <p className="text-2xl font-bold font-mono text-slate-900">{stats.categorias}</p>
+                    <p className="text-xs text-slate-600">Categorías</p>
                   </div>
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="border-primary/15 bg-white shadow-sm">
                 <CardContent className="p-4 flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-accent-light flex items-center justify-center">
-                    <HugeiconsIcon icon={UserGroupIcon} className="w-5 h-5 text-accent" />
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <HugeiconsIcon icon={UserGroupIcon} className="w-5 h-5 text-primary" />
                   </div>
                   <div>
-                    <p className="text-2xl font-bold font-mono text-text-primary">{stats.equipos}</p>
-                    <p className="text-xs text-text-muted">Equipos</p>
+                    <p className="text-2xl font-bold font-mono text-slate-900">{stats.equipos}</p>
+                    <p className="text-xs text-slate-600">Equipos</p>
                   </div>
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="border-primary/15 bg-white shadow-sm">
                 <CardContent className="p-4 flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-success/10 flex items-center justify-center">
-                    <HugeiconsIcon icon={Calendar01Icon} className="w-5 h-5 text-success" />
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <HugeiconsIcon icon={Calendar01Icon} className="w-5 h-5 text-primary" />
                   </div>
                   <div>
-                    <p className="text-2xl font-bold font-mono text-text-primary">{stats.partidosProgramados}</p>
-                    <p className="text-xs text-text-muted">Partidos</p>
+                    <p className="text-2xl font-bold font-mono text-slate-900">{stats.partidosProgramados}</p>
+                    <p className="text-xs text-slate-600">Partidos</p>
                   </div>
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="border-primary/15 bg-white shadow-sm">
                 <CardContent className="p-4 flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-warning/10 flex items-center justify-center">
-                    <HugeiconsIcon icon={UserGroupIcon} className="w-5 h-5 text-warning" />
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <HugeiconsIcon icon={UserGroupIcon} className="w-5 h-5 text-primary" />
                   </div>
                   <div>
-                    <p className="text-2xl font-bold font-mono text-text-primary">{stats.planilleros}</p>
-                    <p className="text-xs text-text-muted">Planilleros</p>
+                    <p className="text-2xl font-bold font-mono text-slate-900">{stats.planilleros}</p>
+                    <p className="text-xs text-slate-600">Planilleros</p>
                   </div>
                 </CardContent>
               </Card>
             </div>
 
             <div>
-              <h2 className="text-sm font-semibold text-text-muted uppercase tracking-wide mb-3">
+              <h2 className="text-sm font-semibold text-primary/80 uppercase tracking-wide mb-3">
                 Acciones Rápidas
               </h2>
               <div className="grid grid-cols-2 gap-3">
-                <Button variant="secondary" className="h-auto py-4 flex flex-col items-center gap-2" onClick={() => openModal("liga")}>
+                <Button variant="outline" className="h-auto py-4 border-primary/25 bg-primary/[0.03] text-primary hover:bg-primary/10 hover:border-primary/40 flex flex-col items-center gap-2" onClick={() => openModal("liga")}>
                   <HugeiconsIcon icon={Add01Icon} className="w-5 h-5" />
                   <span className="text-xs">Nueva Liga</span>
                 </Button>
-                <Button variant="secondary" className="h-auto py-4 flex flex-col items-center gap-2" onClick={() => openModal("categoria")}>
+                <Button variant="outline" className="h-auto py-4 border-primary/25 bg-primary/[0.03] text-primary hover:bg-primary/10 hover:border-primary/40 flex flex-col items-center gap-2" onClick={() => openModal("categoria")}>
                   <HugeiconsIcon icon={Add01Icon} className="w-5 h-5" />
                   <span className="text-xs">Nueva Categoría</span>
                 </Button>
-                <Button variant="secondary" className="h-auto py-4 flex flex-col items-center gap-2" onClick={() => openModal("grupo")}>
+                <Button variant="outline" className="h-auto py-4 border-primary/25 bg-primary/[0.03] text-primary hover:bg-primary/10 hover:border-primary/40 flex flex-col items-center gap-2" onClick={() => openModal("grupo")}>
                   <HugeiconsIcon icon={Add01Icon} className="w-5 h-5" />
                   <span className="text-xs">Nuevo Grupo</span>
                 </Button>
-                <Button variant="secondary" className="h-auto py-4 flex flex-col items-center gap-2" onClick={() => openModal("equipo")}>
+                <Button variant="outline" className="h-auto py-4 border-primary/25 bg-primary/[0.03] text-primary hover:bg-primary/10 hover:border-primary/40 flex flex-col items-center gap-2" onClick={() => openModal("equipo")}>
                   <HugeiconsIcon icon={Add01Icon} className="w-5 h-5" />
                   <span className="text-xs">Nuevo Equipo</span>
                 </Button>
-                <Button variant="secondary" className="h-auto py-4 flex flex-col items-center gap-2" onClick={() => openModal("partido")}>
+                <Button variant="outline" className="h-auto py-4 border-primary/25 bg-primary/[0.03] text-primary hover:bg-primary/10 hover:border-primary/40 flex flex-col items-center gap-2" onClick={() => openModal("partido")}>
                   <HugeiconsIcon icon={Add01Icon} className="w-5 h-5" />
                   <span className="text-xs">Nuevo Partido</span>
                 </Button>
@@ -248,7 +262,7 @@ export default function AdminDashboard() {
             </div>
 
             <div>
-              <h2 className="text-sm font-semibold text-text-muted uppercase tracking-wide mb-3">
+              <h2 className="text-sm font-semibold text-primary/80 uppercase tracking-wide mb-3">
                 Partidos Recientes
               </h2>
               <div className="space-y-3">
@@ -256,28 +270,28 @@ export default function AdminDashboard() {
                   const local = getEquipoById(partido.equipoLocalId);
                   const visitante = getEquipoById(partido.equipoVisitanteId);
                   return (
-                    <Card key={partido._id} hover>
+                    <Card key={partido._id} hover className="border-primary/15 bg-white shadow-sm">
                       <CardContent className="p-4">
                         <div className="flex items-center justify-between mb-2">
-                          <Badge variant="upcoming">Programado</Badge>
-                          <span className="text-xs text-text-muted">
+                          <Badge variant="upcoming" className="border-primary/20 bg-primary/10 text-primary">Programado</Badge>
+                          <span className="text-xs text-slate-600">
                             {new Date(partido.fecha).toLocaleDateString()}
                           </span>
                         </div>
                         <div className="flex items-center justify-between">
                           <div className="flex-1">
                             <div className="flex items-center gap-2">
-                              <Avatar name={local?.nombre || ""} size="sm" className="text-white" style={{ backgroundColor: "#F59E0B" }} />
-                              <span className="font-medium text-text-primary text-sm">{local?.nombre || "Equipo"}</span>
+                              <Avatar name={local?.nombre || ""} size="sm" className="text-white" style={{ backgroundColor: "#2563EB" }} />
+                              <span className="font-medium text-slate-900 text-sm">{local?.nombre || "Equipo"}</span>
                             </div>
                           </div>
                           <div className="px-4">
-                            <span className="text-lg text-text-muted">vs</span>
+                            <span className="text-lg text-slate-500">vs</span>
                           </div>
                           <div className="flex-1 text-right">
                             <div className="flex items-center justify-end gap-2">
-                              <span className="font-medium text-text-primary text-sm">{visitante?.nombre || "Equipo"}</span>
-                              <Avatar name={visitante?.nombre || ""} size="sm" className="text-white" style={{ backgroundColor: "#2563EB" }} />
+                              <span className="font-medium text-slate-900 text-sm">{visitante?.nombre || "Equipo"}</span>
+                              <Avatar name={visitante?.nombre || ""} size="sm" className="text-white" style={{ backgroundColor: "#1D4ED8" }} />
                             </div>
                           </div>
                         </div>
@@ -285,7 +299,7 @@ export default function AdminDashboard() {
                     </Card>
                   );
                 })}
-                {partidos.length === 0 && <p className="text-center text-text-muted py-4">No hay partidos registrados</p>}
+                {partidos.length === 0 && <p className="text-center text-slate-500 py-4">No hay partidos registrados</p>}
               </div>
             </div>
           </>
@@ -393,7 +407,7 @@ export default function AdminDashboard() {
                       </div>
                       <div className="flex items-center justify-between">
                         <div className="flex-1 text-center">
-                          <Avatar name={local?.nombre || "?"} size="md" className="mx-auto mb-2 text-white" style={{ backgroundColor: "#F59E0B" }} />
+                          <Avatar name={local?.nombre || "?"} size="default" className="mx-auto mb-2 text-white" style={{ backgroundColor: "#F59E0B" }} />
                           <p className="font-semibold text-text-primary text-sm">{local?.nombre || "?"}</p>
                         </div>
                         <div className="px-4 text-center">
@@ -401,7 +415,7 @@ export default function AdminDashboard() {
                           <p className="text-xs text-text-muted mt-1">{partido.ubicacion}</p>
                         </div>
                         <div className="flex-1 text-center">
-                          <Avatar name={visitante?.nombre || "?"} size="md" className="mx-auto mb-2 text-white" style={{ backgroundColor: "#2563EB" }} />
+                          <Avatar name={visitante?.nombre || "?"} size="default" className="mx-auto mb-2 text-white" style={{ backgroundColor: "#2563EB" }} />
                           <p className="font-semibold text-text-primary text-sm">{visitante?.nombre || "?"}</p>
                         </div>
                       </div>
@@ -465,10 +479,10 @@ export default function AdminDashboard() {
 
       {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <Card className="w-full max-w-md">
+        <div className="fixed inset-0 bg-primary/25 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <Card className="w-full max-w-md border-primary/20 shadow-xl bg-white">
             <CardContent className="p-6">
-              <h2 className="text-lg font-bold text-text-primary mb-4">
+              <h2 className="text-lg font-bold text-slate-900 mb-4">
                 {modalType === "liga" && "Nueva Liga"}
                 {modalType === "categoria" && "Nueva Categoría"}
                 {modalType === "grupo" && "Nuevo Grupo"}
@@ -486,7 +500,7 @@ export default function AdminDashboard() {
 
                 {modalType === "categoria" && (
                   <>
-                    <Select label="Liga" placeholder="Selecciona liga" value={formData.ligaId} onChange={(e) => setFormData({ ...formData, ligaId: e.target.value })} options={ligas.map((l: any) => ({ value: l._id, label: l.nombre }))} />
+                    <Select label="Liga" placeholder="Selecciona liga" value={formData.ligaId} onChange={(value) => setFormData({ ...formData, ligaId: value })} options={ligas.map((l: any) => ({ value: l._id, label: l.nombre }))} />
                     <Input label="Nombre" placeholder="Ej: Sub-8" value={formData.nombre} onChange={(e) => setFormData({ ...formData, nombre: e.target.value })} required />
                     <Input label="Descripción" placeholder="Ej: 8 años y menores" value={formData.descripcion} onChange={(e) => setFormData({ ...formData, descripcion: e.target.value })} />
                   </>
@@ -494,7 +508,7 @@ export default function AdminDashboard() {
 
                 {modalType === "grupo" && (
                   <>
-                    <Select label="Categoría" placeholder="Selecciona categoría" value={formData.categoriaId} onChange={(e) => setFormData({ ...formData, categoriaId: e.target.value })} options={categorias.map((c: any) => ({ value: c._id, label: c.nombre }))} />
+                    <Select label="Categoría" placeholder="Selecciona categoría" value={formData.categoriaId} onChange={(value) => setFormData({ ...formData, categoriaId: value })} options={categorias.map((c: any) => ({ value: c._id, label: c.nombre }))} />
                     <Input label="Nombre" placeholder="Ej: Grupo A" value={formData.nombre} onChange={(e) => setFormData({ ...formData, nombre: e.target.value })} required />
                   </>
                 )}
@@ -502,16 +516,16 @@ export default function AdminDashboard() {
                 {modalType === "equipo" && (
                   <>
                     <Input label="Nombre del Equipo" placeholder="Ej: Los Tigres" value={formData.nombre} onChange={(e) => setFormData({ ...formData, nombre: e.target.value })} required />
-                    <Select label="Categoría" placeholder="Selecciona categoría" value={formData.categoriaId} onChange={(e) => setFormData({ ...formData, categoriaId: e.target.value })} options={categorias.map((c: any) => ({ value: c._id, label: c.nombre }))} />
+                    <Select label="Categoría" placeholder="Selecciona categoría" value={formData.categoriaId} onChange={(value) => setFormData({ ...formData, categoriaId: value })} options={categorias.map((c: any) => ({ value: c._id, label: c.nombre }))} />
                   </>
                 )}
 
                 {modalType === "partido" && (
                   <>
-                    <Select label="Categoría" placeholder="Selecciona categoría" value={formData.categoriaId} onChange={(e) => setFormData({ ...formData, categoriaId: e.target.value, equipoLocalId: "", equipoVisitanteId: "" })} options={categorias.map((c: any) => ({ value: c._id, label: c.nombre }))} />
-                    <Select label="Equipo Local" placeholder="Selecciona equipo" value={formData.equipoLocalId} onChange={(e) => setFormData({ ...formData, equipoLocalId: e.target.value })} options={equiposByCategoria.map((eq: any) => ({ value: eq._id, label: eq.nombre }))} />
-                    <Select label="Equipo Visitante" placeholder="Selecciona equipo" value={formData.equipoVisitanteId} onChange={(e) => setFormData({ ...formData, equipoVisitanteId: e.target.value })} options={equiposByCategoria.filter((eq: any) => eq._id !== formData.equipoLocalId).map((eq: any) => ({ value: eq._id, label: eq.nombre }))} />
-                    <Select label="Planillero" placeholder="Selecciona planillero" value={formData.planilleroId} onChange={(e) => setFormData({ ...formData, planilleroId: e.target.value })} options={planilleros.map((p: any) => ({ value: p._id, label: p.nombre }))} />
+                    <Select label="Categoría" placeholder="Selecciona categoría" value={formData.categoriaId} onChange={(value) => setFormData({ ...formData, categoriaId: value, equipoLocalId: "", equipoVisitanteId: "" })} options={categorias.map((c: any) => ({ value: c._id, label: c.nombre }))} />
+                    <Select label="Equipo Local" placeholder="Selecciona equipo" value={formData.equipoLocalId} onChange={(value) => setFormData({ ...formData, equipoLocalId: value })} options={equiposByCategoria.map((eq: any) => ({ value: eq._id, label: eq.nombre }))} />
+                    <Select label="Equipo Visitante" placeholder="Selecciona equipo" value={formData.equipoVisitanteId} onChange={(value) => setFormData({ ...formData, equipoVisitanteId: value })} options={equiposByCategoria.filter((eq: any) => eq._id !== formData.equipoLocalId).map((eq: any) => ({ value: eq._id, label: eq.nombre }))} />
+                    <Select label="Planillero" placeholder="Selecciona planillero" value={formData.planilleroId} onChange={(value) => setFormData({ ...formData, planilleroId: value })} options={planilleros.map((p: any) => ({ value: p._id, label: p.nombre }))} />
                     <Input label="Fecha y Hora" type="datetime-local" value={formData.fecha} onChange={(e) => setFormData({ ...formData, fecha: e.target.value })} required />
                     <Input label="Ubicación" placeholder="Ej: Campo 1" value={formData.ubicacion} onChange={(e) => setFormData({ ...formData, ubicacion: e.target.value })} required />
                   </>
@@ -529,8 +543,8 @@ export default function AdminDashboard() {
         </div>
       )}
 
-      <div className="p-4 fixed bottom-0 left-0 right-0 bg-bg-secondary border-t border-border">
-        <Button variant="secondary" className="w-full" onClick={handleLogout}>
+      <div className="p-4 fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur border-t border-primary/10">
+        <Button variant="outline" className="w-full border-primary/25 text-primary hover:bg-primary/10 hover:border-primary/40" onClick={handleLogout}>
           <HugeiconsIcon icon={Logout01Icon} className="w-4 h-4" />
           Cerrar Sesión
         </Button>

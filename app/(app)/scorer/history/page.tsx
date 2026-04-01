@@ -11,8 +11,10 @@ import { TransactionHistoryIcon } from "@hugeicons/core-free-icons";
 
 export default function ScorerHistoryPage() {
   const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [userName, setUserName] = useState<string>("Planillero");
   useEffect(() => {
     setUserEmail(localStorage.getItem("userEmail"));
+    setUserName(localStorage.getItem("userName") || "Planillero");
   }, []);
   const currentUser = useQuery(api.api.getUsuarioByEmail, userEmail ? { email: userEmail } : "skip");
   const partidos = useQuery(
@@ -28,10 +30,25 @@ export default function ScorerHistoryPage() {
     fecha ? new Date(fecha).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : undefined;
 
   const completedMatches = partidos.filter((m: any) => m.estado === "finalizado");
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+    } finally {
+      localStorage.removeItem("userRole");
+      localStorage.removeItem("userName");
+      localStorage.removeItem("userEmail");
+      window.location.href = "/login";
+    }
+  };
 
   return (
     <div className="min-h-screen bg-bg-secondary">
-      <Header title="Historial" subtitle="Partidos finalizados" />
+      <Header
+        title="Historial"
+        subtitle="Partidos finalizados"
+        user={{ name: userName, email: userEmail || undefined, role: "scorer" }}
+        onLogout={handleLogout}
+      />
 
       <div className="p-4 space-y-3">
         {completedMatches.length > 0 ? (

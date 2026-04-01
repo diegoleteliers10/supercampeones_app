@@ -12,8 +12,10 @@ import Link from "next/link";
 
 export default function ScorerPage() {
   const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [userName, setUserName] = useState<string>("Planillero");
   useEffect(() => {
     setUserEmail(localStorage.getItem("userEmail"));
+    setUserName(localStorage.getItem("userName") || "Planillero");
   }, []);
   const currentUser = useQuery(api.api.getUsuarioByEmail, userEmail ? { email: userEmail } : "skip");
   const partidos = useQuery(
@@ -30,10 +32,25 @@ export default function ScorerPage() {
 
   const liveMatches = partidos.filter((m: any) => m.estado === "en_curso");
   const upcomingMatches = partidos.filter((m: any) => m.estado === "programado");
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+    } finally {
+      localStorage.removeItem("userRole");
+      localStorage.removeItem("userName");
+      localStorage.removeItem("userEmail");
+      window.location.href = "/login";
+    }
+  };
 
   return (
     <div className="min-h-screen bg-bg-secondary">
-      <Header title="Mis Partidos" subtitle="Planillero" />
+      <Header
+        title="Mis Partidos"
+        subtitle="Planillero"
+        user={{ name: userName, email: userEmail || undefined, role: "scorer" }}
+        onLogout={handleLogout}
+      />
 
       <div className="p-4 space-y-4">
         {/* En vivo + Próximos (navegación por barra inferior: Partidos) */}

@@ -195,6 +195,31 @@ export const createPartido = mutation({
   },
 });
 
+export const updatePartido = mutation({
+  args: {
+    partidoId: v.id("partidos"),
+    equipoLocalId: v.id("equipos"),
+    equipoVisitanteId: v.id("equipos"),
+    categoriaId: v.id("categorias"),
+    grupoId: v.optional(v.id("grupos")),
+    fecha: v.number(),
+    ubicacion: v.string(),
+    planilleroId: v.optional(v.id("usuarios")),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.partidoId, {
+      equipoLocalId: args.equipoLocalId,
+      equipoVisitanteId: args.equipoVisitanteId,
+      categoriaId: args.categoriaId,
+      grupoId: args.grupoId,
+      fecha: args.fecha,
+      ubicacion: args.ubicacion,
+      planilleroId: args.planilleroId,
+    });
+    return args.partidoId;
+  },
+});
+
 export const updatePartidoEstado = mutation({
   args: {
     partidoId: v.id("partidos"),

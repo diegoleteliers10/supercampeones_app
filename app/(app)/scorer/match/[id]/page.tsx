@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, use } from "react";
+import { useState, use, useEffect } from "react";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../../../convex/_generated/api";
 import { Header } from "@/components/ui/header";
@@ -19,6 +19,12 @@ import {
 
 export default function MatchDetailPage(props: { params: Promise<{ id: string }> }) {
   const params = use(props.params);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+  const [userName, setUserName] = useState<string>("Planillero");
+  useEffect(() => {
+    setUserEmail(localStorage.getItem("userEmail"));
+    setUserName(localStorage.getItem("userName") || "Planillero");
+  }, []);
   const match = useQuery(api.api.getPartido, { partidoId: params.id as any });
   const equipos = useQuery(api.api.listEquipos, {}) || [];
   const events = useQuery(api.api.listEventosPartido, { partidoId: params.id as any }) || [];
@@ -49,12 +55,24 @@ export default function MatchDetailPage(props: { params: Promise<{ id: string }>
       golesVisitante: visitorGoals,
     });
   };
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+    } finally {
+      localStorage.removeItem("userRole");
+      localStorage.removeItem("userName");
+      localStorage.removeItem("userEmail");
+      window.location.href = "/login";
+    }
+  };
 
   return (
     <div className="min-h-screen bg-bg-secondary">
       <Header 
         title={`Partido ${match.ubicacion}`}
         subtitle={new Date(match.fecha).toLocaleString()}
+        user={{ name: userName, email: userEmail || undefined, role: "scorer" }}
+        onLogout={handleLogout}
       />
 
       <div className="p-4 space-y-4">

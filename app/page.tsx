@@ -52,7 +52,7 @@ function MobileTabs({
             onClick={() => onTabChange(tab.id)}
             className={`flex flex-col items-center justify-center gap-1 px-4 py-2 min-w-[80px] rounded-lg transition-all relative ${
               activeTab === tab.id
-                ? "text-accent"
+                ? "text-primary"
                 : "text-text-muted hover:text-text-secondary"
             }`}
           >
@@ -63,7 +63,7 @@ function MobileTabs({
               {tab.label}
             </span>
             {activeTab === tab.id && (
-              <div className="absolute bottom-0 w-8 h-0.5 bg-accent rounded-full" />
+              <div className="absolute bottom-0 w-8 h-0.5 bg-primary rounded-full" />
             )}
           </button>
         ))}
@@ -101,8 +101,12 @@ function ParentHomePageContent() {
   const getCategoriaById = (id: any) =>
     categorias.find((c: any) => c._id === id);
 
-  // Generate tabla from equipos data
-  const tabla = equipos.map((e: any, index: number) => ({
+  // Tabla por categoría: mismo filtro que Partidos / Equipos
+  const equiposParaTabla = selectedCategory
+    ? equipos.filter((e: any) => e.categoriaId === selectedCategory)
+    : equipos;
+
+  const tabla = equiposParaTabla.map((e: any, index: number) => ({
     ...e,
     _id: e._id || index,
     posicion: index + 1,
@@ -121,7 +125,7 @@ function ParentHomePageContent() {
       <div className="px-4 pt-4">
         <div className="flex items-start justify-between gap-3 mb-3">
           <div className="min-w-0">
-            <p className="text-xs font-semibold uppercase tracking-wide text-accent">
+            <p className="text-xs font-semibold uppercase tracking-wide text-primary/90">
               Bienvenidos
             </p>
             <h2 className="text-xl font-bold text-text-primary leading-tight">
@@ -149,7 +153,7 @@ function ParentHomePageContent() {
         {activeTab === "partidos" && (
           <div className="space-y-4">
             {/* Category Filter */}
-            <div className="flex gap-2 overflow-x-auto py-1 pb-2">
+            <div className="flex gap-2 overflow-x-auto px-1 py-1 pb-2">
               <Badge
                 variant={!selectedCategory ? "completed" : "upcoming"}
                 selected={!selectedCategory}
@@ -206,7 +210,7 @@ function ParentHomePageContent() {
                             <div className="flex-1 text-center">
                               <Avatar
                                 name={local?.nombre || "?"}
-                                size="md"
+                                size="default"
                                 className="mx-auto mb-2 text-white"
                                 style={{ backgroundColor: "#888" }}
                               />
@@ -224,7 +228,7 @@ function ParentHomePageContent() {
                             <div className="flex-1 text-center">
                               <Avatar
                                 name={visitante?.nombre || "?"}
-                                size="md"
+                                size="default"
                                 className="mx-auto mb-2 text-white"
                                 style={{ backgroundColor: "#888" }}
                               />
@@ -257,7 +261,7 @@ function ParentHomePageContent() {
         {activeTab === "tabla" && (
           <div className="space-y-4">
             {/* Category Filter */}
-            <div className="flex gap-2 overflow-x-auto py-1 pb-2">
+            <div className="flex gap-2 overflow-x-auto px-1 py-1 pb-2">
               <Badge
                 variant={!selectedCategory ? "completed" : "upcoming"}
                 selected={!selectedCategory}
@@ -380,7 +384,7 @@ function ParentHomePageContent() {
         {activeTab === "equipos" && (
           <div className="space-y-4">
             {/* Category Filter */}
-            <div className="flex gap-2 overflow-x-auto py-1 pb-2">
+            <div className="flex gap-2 overflow-x-auto px-1 py-1 pb-2">
               <Badge
                 variant={!selectedCategory ? "completed" : "upcoming"}
                 selected={!selectedCategory}

@@ -136,7 +136,7 @@ export default function RegisterPage() {
                 type="button"
                 onClick={() => setShowPassword((v) => !v)}
                 aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
-                className="absolute right-3 top-[2.6rem] text-text-muted hover:text-text-secondary"
+                className="absolute right-2.5 top-[2.6rem] -translate-y-1/2 inline-flex h-8 w-8 items-center justify-center rounded-md text-text-muted hover:text-text-secondary"
               >
                 {showPassword ? <HugeiconsIcon icon={ViewOffIcon} className="w-5 h-5" /> : <HugeiconsIcon icon={EyeIcon} className="w-5 h-5" />}
               </button>
@@ -155,7 +155,7 @@ export default function RegisterPage() {
                 type="button"
                 onClick={() => setShowConfirmPassword((v) => !v)}
                 aria-label={showConfirmPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
-                className="absolute right-3 top-[2.6rem] text-text-muted hover:text-text-secondary"
+                className="absolute right-2.5 top-[2.6rem] -translate-y-1/2 inline-flex h-8 w-8 items-center justify-center rounded-md text-text-muted hover:text-text-secondary"
               >
                 {showConfirmPassword ? <HugeiconsIcon icon={ViewOffIcon} className="w-5 h-5" /> : <HugeiconsIcon icon={EyeIcon} className="w-5 h-5" />}
               </button>
@@ -164,7 +164,7 @@ export default function RegisterPage() {
               label="Rol"
               options={roleOptions}
               value={role}
-              onChange={(e) => setRole(e.target.value)}
+              onChange={(value) => setRole(value)}
             />
             
             {/* Role Info */}
@@ -198,12 +198,12 @@ export default function RegisterPage() {
               <HugeiconsIcon icon={Login01Icon} className="w-5 h-5" />
               Crear Cuenta
             </Button>
-            <p className="text-sm text-text-muted text-center">
-              ¿Ya tienes cuenta?{" "}
+            <div className="w-full text-center text-sm text-text-muted">
+              <span>¿Ya tienes cuenta? </span>
               <Link href="/login" className="text-accent font-medium hover:underline">
                 Inicia sesión
               </Link>
-            </p>
+            </div>
           </CardFooter>
         </form>
       </Card>
